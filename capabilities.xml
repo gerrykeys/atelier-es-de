@@ -337,6 +337,15 @@
         <startupToSystem>fade</startupToSystem>
         <startupToGamelist>fade</startupToGamelist>
     </transitions>
+    <transitions name="softList">
+        <selectable>false</selectable>
+        <systemToSystem>instant</systemToSystem>
+        <systemToGamelist>slide</systemToGamelist>
+        <gamelistToGamelist>instant</gamelistToGamelist>
+        <gamelistToSystem>slide</gamelistToSystem>
+        <startupToSystem>fade</startupToSystem>
+        <startupToGamelist>fade</startupToGamelist>
+    </transitions>
     <suppressTransitionProfiles>
         <entry>builtin-instant</entry>
         <entry>builtin-slide</entry>
@@ -745,6 +754,208 @@
         <label language="ro_RO">Grilă · nume</label>
         <label language="sr_RS">Mreža · nazivi</label>
         <label language="vi_VN">Lưới · tên</label>
+        <selectable>true</selectable>
+    </variant>
+    <variant name="indexList">
+        <label language="en_US">Index · list</label>
+        <label language="en_GB">Index · list</label>
+        <label language="it_IT">Indice · elenco</label>
+        <label language="fr_FR">Index · liste</label>
+        <label language="de_DE">Index · Liste</label>
+        <label language="es_ES">Índice · lista</label>
+        <label language="pt_BR">Índice · lista</label>
+        <label language="pt_PT">Índice · lista</label>
+        <label language="nl_NL">Index · lijst</label>
+        <label language="sv_SE">Index · lista</label>
+        <label language="pl_PL">Indeks · lista</label>
+        <label language="ru_RU">Указатель · список</label>
+        <label language="ja_JP">インデックス · リスト</label>
+        <label language="ko_KR">인덱스 · 목록</label>
+        <label language="zh_CN">索引 · 列表</label>
+        <label language="zh_TW">索引 · 列表</label>
+        <label language="ar_SA">فهرس · قائمة</label>
+        <label language="bs_BA">Indeks · lista</label>
+        <label language="ca_ES">Índex · llista</label>
+        <label language="hr_HR">Kazalo · popis</label>
+        <label language="ro_RO">Index · listă</label>
+        <label language="sr_RS">Indeks · lista</label>
+        <label language="vi_VN">Mục lục · danh sách</label>
+        <selectable>true</selectable>
+        <override>
+            <trigger>noMedia</trigger>
+            <mediaType>miximage, screenshot, titlescreen, video</mediaType>
+            <useVariant>typographicList</useVariant>
+        </override>
+    </variant>
+    <variant name="indexStillList">
+        <label language="en_US">Index, no videos · list</label>
+        <label language="en_GB">Index, no videos · list</label>
+        <label language="it_IT">Indice, senza video · elenco</label>
+        <label language="fr_FR">Index, sans vidéos · liste</label>
+        <label language="de_DE">Index, ohne Videos · Liste</label>
+        <label language="es_ES">Índice, sin vídeos · lista</label>
+        <label language="pt_BR">Índice, sem vídeos · lista</label>
+        <label language="pt_PT">Índice, sem vídeos · lista</label>
+        <label language="nl_NL">Index, zonder video's · lijst</label>
+        <label language="sv_SE">Index, utan videor · lista</label>
+        <label language="pl_PL">Indeks, bez wideo · lista</label>
+        <label language="ru_RU">Указатель, без видео · список</label>
+        <label language="ja_JP">インデックス（動画なし） · リスト</label>
+        <label language="ko_KR">인덱스 (동영상 없음) · 목록</label>
+        <label language="zh_CN">索引（无视频） · 列表</label>
+        <label language="zh_TW">索引（無影片） · 列表</label>
+        <label language="ar_SA">فهرس، بدون فيديو · قائمة</label>
+        <label language="bs_BA">Indeks, bez videa · lista</label>
+        <label language="ca_ES">Índex, sense vídeos · llista</label>
+        <label language="hr_HR">Kazalo, bez videa · popis</label>
+        <label language="ro_RO">Index, fără videoclipuri · listă</label>
+        <label language="sr_RS">Indeks, bez videa · lista</label>
+        <label language="vi_VN">Mục lục, không video · danh sách</label>
+        <selectable>true</selectable>
+        <override>
+            <trigger>noMedia</trigger>
+            <mediaType>miximage, screenshot, titlescreen</mediaType>
+            <useVariant>typographicList</useVariant>
+        </override>
+    </variant>
+    <variant name="indexCompactList">
+        <label language="en_US">Index, compact · list</label>
+        <label language="en_GB">Index, compact · list</label>
+        <label language="it_IT">Indice compatto · elenco</label>
+        <label language="fr_FR">Index compact · liste</label>
+        <label language="de_DE">Index, kompakt · Liste</label>
+        <label language="es_ES">Índice compacto · lista</label>
+        <label language="pt_BR">Índice compacto · lista</label>
+        <label language="pt_PT">Índice compacto · lista</label>
+        <label language="nl_NL">Index, compact · lijst</label>
+        <label language="sv_SE">Index, kompakt · lista</label>
+        <label language="pl_PL">Indeks kompaktowy · lista</label>
+        <label language="ru_RU">Указатель, компактный · список</label>
+        <label language="ja_JP">インデックス（コンパクト） · リスト</label>
+        <label language="ko_KR">인덱스 (컴팩트) · 목록</label>
+        <label language="zh_CN">索引（紧凑） · 列表</label>
+        <label language="zh_TW">索引（緊湊） · 列表</label>
+        <label language="ar_SA">فهرس مضغوط · قائمة</label>
+        <label language="bs_BA">Indeks, kompaktni · lista</label>
+        <label language="ca_ES">Índex compacte · llista</label>
+        <label language="hr_HR">Kazalo, kompaktno · popis</label>
+        <label language="ro_RO">Index compact · listă</label>
+        <label language="sr_RS">Indeks, kompaktni · lista</label>
+        <label language="vi_VN">Mục lục thu gọn · danh sách</label>
+        <selectable>true</selectable>
+        <override>
+            <trigger>noMedia</trigger>
+            <mediaType>miximage, screenshot, titlescreen, video</mediaType>
+            <useVariant>typographicList</useVariant>
+        </override>
+    </variant>
+    <variant name="indexCompactStillList">
+        <label language="en_US">Index, compact, no videos · list</label>
+        <label language="en_GB">Index, compact, no videos · list</label>
+        <label language="it_IT">Indice compatto, senza video · elenco</label>
+        <label language="fr_FR">Index compact, sans vidéos · liste</label>
+        <label language="de_DE">Index, kompakt, ohne Videos · Liste</label>
+        <label language="es_ES">Índice compacto, sin vídeos · lista</label>
+        <label language="pt_BR">Índice compacto, sem vídeos · lista</label>
+        <label language="pt_PT">Índice compacto, sem vídeos · lista</label>
+        <label language="nl_NL">Index, compact, zonder video's · lijst</label>
+        <label language="sv_SE">Index, kompakt, utan videor · lista</label>
+        <label language="pl_PL">Indeks kompaktowy, bez wideo · lista</label>
+        <label language="ru_RU">Указатель, компактный, без видео · список</label>
+        <label language="ja_JP">インデックス（コンパクト・動画なし） · リスト</label>
+        <label language="ko_KR">인덱스 (컴팩트, 동영상 없음) · 목록</label>
+        <label language="zh_CN">索引（紧凑，无视频） · 列表</label>
+        <label language="zh_TW">索引（緊湊，無影片） · 列表</label>
+        <label language="ar_SA">فهرس مضغوط، بدون فيديو · قائمة</label>
+        <label language="bs_BA">Indeks, kompaktni, bez videa · lista</label>
+        <label language="ca_ES">Índex compacte, sense vídeos · llista</label>
+        <label language="hr_HR">Kazalo, kompaktno, bez videa · popis</label>
+        <label language="ro_RO">Index compact, fără videoclipuri · listă</label>
+        <label language="sr_RS">Indeks, kompaktni, bez videa · lista</label>
+        <label language="vi_VN">Mục lục thu gọn, không video · danh sách</label>
+        <selectable>true</selectable>
+        <override>
+            <trigger>noMedia</trigger>
+            <mediaType>miximage, screenshot, titlescreen</mediaType>
+            <useVariant>typographicList</useVariant>
+        </override>
+    </variant>
+    <variant name="typographicList">
+        <label language="en_US">Typographic · list</label>
+        <label language="en_GB">Typographic · list</label>
+        <label language="it_IT">Tipografico · elenco</label>
+        <label language="fr_FR">Typographique · liste</label>
+        <label language="de_DE">Typografisch · Liste</label>
+        <label language="es_ES">Tipográfico · lista</label>
+        <label language="pt_BR">Tipográfico · lista</label>
+        <label language="pt_PT">Tipográfico · lista</label>
+        <label language="nl_NL">Typografisch · lijst</label>
+        <label language="sv_SE">Typografisk · lista</label>
+        <label language="pl_PL">Typograficzny · lista</label>
+        <label language="ru_RU">Типографский · список</label>
+        <label language="ja_JP">タイポグラフィ · リスト</label>
+        <label language="ko_KR">타이포그래피 · 목록</label>
+        <label language="zh_CN">排版 · 列表</label>
+        <label language="zh_TW">排版 · 列表</label>
+        <label language="ar_SA">طباعي · قائمة</label>
+        <label language="bs_BA">Tipografski · lista</label>
+        <label language="ca_ES">Tipogràfic · llista</label>
+        <label language="hr_HR">Tipografski · popis</label>
+        <label language="ro_RO">Tipografic · listă</label>
+        <label language="sr_RS">Tipografski · lista</label>
+        <label language="vi_VN">Kiểu chữ · danh sách</label>
+        <selectable>true</selectable>
+    </variant>
+    <variant name="galleryList">
+        <label language="en_US">Gallery · list</label>
+        <label language="en_GB">Gallery · list</label>
+        <label language="it_IT">Galleria · elenco</label>
+        <label language="fr_FR">Galerie · liste</label>
+        <label language="de_DE">Galerie · Liste</label>
+        <label language="es_ES">Galería · lista</label>
+        <label language="pt_BR">Galeria · lista</label>
+        <label language="pt_PT">Galeria · lista</label>
+        <label language="nl_NL">Galerij · lijst</label>
+        <label language="sv_SE">Galleri · lista</label>
+        <label language="pl_PL">Galeria · lista</label>
+        <label language="ru_RU">Галерея · список</label>
+        <label language="ja_JP">ギャラリー · リスト</label>
+        <label language="ko_KR">갤러리 · 목록</label>
+        <label language="zh_CN">画廊 · 列表</label>
+        <label language="zh_TW">畫廊 · 列表</label>
+        <label language="ar_SA">معرض · قائمة</label>
+        <label language="bs_BA">Galerija · lista</label>
+        <label language="ca_ES">Galeria · llista</label>
+        <label language="hr_HR">Galerija · popis</label>
+        <label language="ro_RO">Galerie · listă</label>
+        <label language="sr_RS">Galerija · lista</label>
+        <label language="vi_VN">Thư viện · danh sách</label>
+        <selectable>true</selectable>
+    </variant>
+    <variant name="gridList">
+        <label language="en_US">Grid · list</label>
+        <label language="en_GB">Grid · list</label>
+        <label language="it_IT">Griglia · elenco</label>
+        <label language="fr_FR">Grille · liste</label>
+        <label language="de_DE">Raster · Liste</label>
+        <label language="es_ES">Cuadrícula · lista</label>
+        <label language="pt_BR">Grade · lista</label>
+        <label language="pt_PT">Grelha · lista</label>
+        <label language="nl_NL">Raster · lijst</label>
+        <label language="sv_SE">Rutnät · lista</label>
+        <label language="pl_PL">Siatka · lista</label>
+        <label language="ru_RU">Сетка · список</label>
+        <label language="ja_JP">グリッド · リスト</label>
+        <label language="ko_KR">그리드 · 목록</label>
+        <label language="zh_CN">网格 · 列表</label>
+        <label language="zh_TW">網格 · 列表</label>
+        <label language="ar_SA">شبكة · قائمة</label>
+        <label language="bs_BA">Mreža · lista</label>
+        <label language="ca_ES">Graella · llista</label>
+        <label language="hr_HR">Mreža · popis</label>
+        <label language="ro_RO">Grilă · listă</label>
+        <label language="sr_RS">Mreža · lista</label>
+        <label language="vi_VN">Lưới · danh sách</label>
         <selectable>true</selectable>
     </variant>
 </themeCapabilities>

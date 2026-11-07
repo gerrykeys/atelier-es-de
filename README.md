@@ -31,6 +31,7 @@ Everything ES-DE shows itself: the system carousel, the game lists, the colors, 
 ### Highlights
 
 - **Four layouts in seven variants:** Index, with or without videos and in a compact form, Typographic, Gallery and Grid, each drawn by hand for 21:9, 16:9, 16:10 and 4:3
+- **Two ways to choose a system:** the carousel of controller drawings, or a list of your systems beside a page about the one you're on
 - **Eight color schemes:** Noir, Ivory, Midnight and OLED, each also in an *atmosphere* version that takes on the color of the console
 - **File name tags:** region, languages and revision, read straight from your ROM file names and shown as small tags, with nothing to scrape
 - **A clean Collections system:** a page of its own for your custom collections, without random games or videos playing
@@ -54,6 +55,12 @@ Would you rather read the neighbors too? Every variant also comes as *· names* 
 
 The names are part of the drawings, so they keep their size whatever the font size, and they are the ones ES-DE gives its systems: a system you renamed yourself keeps its original name there. They replace the tags too, except for the few systems that have the same name in ES-DE, such as the Japanese Mega Drive. Custom collections shown as systems of their own have a folder without a name, and so have ES-DE's own collections (*Favorites*, *All Games*, *Last Played*, *Collections*) in languages whose letters the font doesn't have: Russian, Japanese, Korean, Chinese and Arabic.
 
+Or would you rather see your systems one under the other? Every variant also comes as *· list* (*Index · list*, *Grid · list* and so on). The carousel then gives way to a list of your systems on the left, in the same place, type and size as the list of games in the Index, with the same small accent beside the one you're on. The right of the page tells you about it: its drawing, its name, the caption beside a short rule, its history and the number of games. Its year of release is set large and faint behind the drawing. Collections and the Retro Achievements and Catalogue entries have no year there. With the Index variants, opening a system feels like turning a page: the list of systems becomes the list of its games, in the same place.
+
+![The system view as a list: NEC PC Engine, Nintendo 64, Nintendo Entertainment System and the other systems on the left, Nintendo 64 selected; on the right its controller drawing with 1996 set large and faint behind it, the name, the caption Nintendo · 1996 · Console, its history and 4 games](screenshots/system-list.png)
+
+A list can't slide or fade the way the carousel does, so between systems the *· list* variants change the page at once, as the details do when you move through a game list. That happens on its own while *Theme transitions* is left on *Automatic*, as it is unless you change it. If you pick *Soft* yourself, ES-DE darkens the page for a moment at every step, which shows most on Ivory. *Slide* turns the page up or down with the list, and *Instant* changes it at once, as it does everywhere else.
+
 ### Layouts
 
 Four ways to browse your games, all sharing the same calm grid, and the Index comes in four variants. Pick one under *UI settings → Theme variant*.
@@ -62,9 +69,9 @@ Four ways to browse your games, all sharing the same calm grid, and the Index co
 
 ![Index layout: the game list on the left, the media card with the game video in the middle, release facts and play statistics on the right](screenshots/index.gif)
 
-The classic: your game list beside a rounded media card lit by a soft glow, where the screenshot gently gives way to the game video, with the facts and your play statistics alongside. *Index, no videos* keeps the still image, if you prefer a quieter screen.
+The classic: your game list beside a rounded media card lit by a soft glow, where the screenshot gently gives way to the game video, with the facts and your play statistics alongside. The title stands on one line level with the top of the list, so the description below gets four lines on a 16:9 screen; a longer title scrolls sideways. *Index, no videos* keeps the still image, if you prefer a quieter screen.
 
-Do you read the descriptions? *Index, compact* leaves out the large title, which the list beside it already shows, moves everything else up and gives the description the room: six lines instead of two on a 16:9 screen. It also comes without videos.
+Do you read the descriptions? *Index, compact* leaves out the large title, which the list beside it already shows, moves everything else up and gives the description the room: six lines instead of four on a 16:9 screen. It also comes without videos.
 
 #### Typographic
 
@@ -132,7 +139,7 @@ Three font sizes, from the top: **medium**, **large**, for a television seen fro
 
 A fourth, **extra large**, is for small screens held in the hand, such as a 4" handheld. It enlarges what is smallest elsewhere: the clock, the system status, the header, the genre, the game count, the file tags and the help prompts, and a little the game list. The rest stays as in *large*.
 
-Whatever the size, what you need to read is never cut short with an ellipsis. On 4:3 screens, which are mostly handhelds, a title takes up to three lines, the genre spans the whole column, the stars have a line of their own beneath the badges, and the developer has a line of its own under the picture; a genre, developer or system name that is still too long scrolls sideways, as the Gallery title does.
+Whatever the size, what you need to read is never cut short with an ellipsis. On 4:3 screens, which are mostly handhelds, a title in the Grid takes up to three lines, the genre spans the whole column, the stars have a line of their own beneath the badges, and the developer has a line of its own under the picture; a genre, developer or system name that is still too long scrolls sideways, as the Gallery title does.
 
 ### Languages
 
@@ -151,11 +158,11 @@ Everything below is in ES-DE's *UI settings* menu.
 | Setting | Choices |
 | :-- | :-- |
 | Theme | Atelier |
-| Theme variant | Index · Index, no videos · Index, compact · Index, compact, no videos · Typographic · Gallery · Grid, each also as *· names* |
+| Theme variant | Index · Index, no videos · Index, compact · Index, compact, no videos · Typographic · Gallery · Grid, each also as *· names* and *· list* |
 | Theme color scheme | Noir · Ivory · Midnight · OLED, each also as *· atmosphere* |
 | Theme font size | Medium · Large · Small · Extra large |
 | Theme aspect ratio | Automatic · 21:9 · 16:9 · 16:10 · 4:3 |
-| Theme transitions | Soft (default) · Slide · Instant |
+| Theme transitions | Soft (default) · Slide · Instant; leave it on *Automatic* for the *· list* variants |
 | Theme language | Automatic, or any of the 23 languages |
 | Enable theme variant triggers | On: systems without scraped media use Typographic |
 
@@ -293,7 +300,7 @@ The Catalogue has three sections, named on the line at the top with how many gam
 
 Each section lists its platforms, with their drawing and how many of their games it has, and the corner names the archive in use. Beside the list, the chosen platform says how many of its games are in the archive, in ES-DE, not archived and to install. Press **A** to open a platform, and **B** takes you back to the platforms.
 
-Inside a platform, a line and its bar beneath the sections tell how its games stand: in the Archive, how many are installed and how many are left to install; in ES-DE, how many are archived as they are, how many are to sync and how many aren't archived. Not archived has this line over all the platforms too, with how much there is to archive.
+Inside a platform, a line and its bar beneath the sections tell how its games stand: in the Archive, how many are installed and how many are left to install; in ES-DE, how many are archived as they are, how many are to sync and how many aren't archived. Each line ends with how much the games take, then their media apart: the size of a game is only its own files. A line too long for its place scrolls sideways. Not archived has this line over all the platforms too, with how much there is to archive.
 
 <table>
   <tr>
@@ -322,7 +329,7 @@ A platform's games fill the page as a grid of covers, or as a list of titles wit
 | an arrow down, with a paler cover: **To install** | in the archive only, ready to download |
 | a dash: **Can't be installed** | in the archive only, of a system this ES-DE doesn't have |
 
-While a game is archived or downloaded, a line beneath its cover grows with the transfer. Beside the covers the selected game says the same in words, after its icon, with its size and the size of its zip, when and from which computer it was archived, and how its saves stand. Rest on a game and, as in ES-DE, its screenshot gives way to its video, with the sound and volume ES-DE plays its game list videos with; a game only in the archive plays the video archived with it.
+While a game is archived or downloaded, a line beneath its cover grows with the transfer. Beside the covers the selected game says the same in words, after its icon, with its size and the size of its zip, the size of its media (ES-DE's, or the archive's for a game only there), when and from which computer it was archived, and how its saves stand. Rest on a game and, as in ES-DE, its screenshot gives way to its video, with the sound and volume ES-DE plays its game list videos with; a game only in the archive plays the video archived with it.
 
 #### Archiving and bringing back
 
@@ -337,7 +344,7 @@ While a game is archived or downloaded, a line beneath its cover grows with the 
   </tr>
 </table>
 
-On a game, press **A** for what can be done with it, and only that: archive it (or its newer version), update its details in the archive, download it to ES-DE or replace ES-DE's copy with the archive's, upload or download its saves, remove it from ES-DE or from the archive. The choices that move files say how much. Mark several games with **X** and **A** acts on all of them; **Y**, on a platform or among its games, acts on the platform's games in the section, such as *Archive the games not archived*, *Archive the new and changed games*, *Update details in the archive* or *Download what ES-DE lacks*, and can mark them all.
+On a game, press **A** for what can be done with it, and only that: archive it (or its newer version), update its details in the archive, download it to ES-DE or replace ES-DE's copy with the archive's, upload or download its saves, remove it from ES-DE or from the archive. The choices that move files say how much: the games, then the media of the kinds that travel. A choice too long for the menu scrolls sideways while it is selected, as a game's name does in ES-DE. Mark several games with **X** and **A** acts on all of them; **Y**, on a platform or among its games, acts on the platform's games in the section, such as *Archive the games not archived*, *Archive the new and changed games*, *Update details in the archive* or *Download what ES-DE lacks*, and can mark them all.
 
 Changes go one way: the archive's folder is never edited by hand, so only ES-DE's copy of a game changes, and archiving it again brings the archive up to date. After you scrape a game again or change its details in ES-DE, it turns *To sync*, and *Update details in the archive* brings the new details and media across and leaves the game's zip as it is. None of this is ever done by itself.
 

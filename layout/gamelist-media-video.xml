@@ -8,7 +8,9 @@
 
     When ES-DE starts a video it stops drawing the still image and fades the video in
     from transparency. The videoStill element keeps the screenshot underneath so that
-    moment becomes a crossfade instead of a brief gap.
+    moment becomes a crossfade instead of a brief gap. Its pos and cropSize are those
+    of gameVideo in every aspect ratio file, so that it is the video's own still image
+    pixel for pixel: a smaller one would let the card show around it during the fade.
 -->
 
 <theme>

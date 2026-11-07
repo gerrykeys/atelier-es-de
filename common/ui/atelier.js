@@ -137,8 +137,8 @@ function bar(parent, p) {
 
 // A label with a percentage at the right end, a bar beneath and a line of figures; the
 // bar can be filled without a percentage. The label element is the function's label,
-// for an icon before the text.
-function progressBlock(parent, x, y, width) {
+// for an icon before the text, and the bar's track its track.
+function progressBlock(parent, x, y, width, { scroll = false } = {}) {
   const label = place(el('div', 'line label', parent), { pos: [x, y], size: [width * 0.7, 0.03] }, { line: true, origin: [0, 0.5] });
   const value = place(el('div', 'line percent', parent), { pos: [x + width, y], size: [width * 0.3, 0.04] }, { line: true, origin: [1, 0.5] });
   const fill = bar(parent, { pos: [x, y + 0.026], size: [width, 0.004] });
@@ -147,11 +147,52 @@ function progressBlock(parent, x, y, width) {
     label.textContent = name;
     value.textContent = fraction == null ? '' : percent(fraction);
     fill(barFraction ?? (fraction || 0));
-    sub.textContent = figures || '';
+    if (scroll) scrollText(sub, figures || '');
+    else sub.textContent = figures || '';
     sub.classList.toggle('warning', Boolean(warning));
   };
   set.label = label;
+  set.track = fill.track;
   return set;
+}
+
+// What is wider than its box scrolls sideways, as the theme's lines do in ES-DE: it rests
+// at its start for a moment, then slides until its end has gone by, a copy of it
+// following after a gap, and rests again where it began. What fits stays still, and
+// nothing ends in an ellipsis. The box keeps its content; call it once the content is in.
+const MARQUEE_DELAY = 2500;
+// In font sizes a second
+const MARQUEE_SPEED = 2.5;
+function marquee(box) {
+  if (box.firstElementChild && box.firstElementChild.classList.contains('marquee-run')) return;
+  if (box.scrollWidth <= box.clientWidth) return;
+  const run = el('span', 'marquee-run');
+  const first = el('span', '', run);
+  first.append(...box.childNodes);
+  const gap = el('span', 'marquee-gap', run);
+  run.append(first.cloneNode(true));
+  box.replaceChildren(run);
+  box.classList.add('scrolling');
+  const shift = first.offsetWidth + gap.offsetWidth;
+  const travel = shift / (MARQUEE_SPEED * parseFloat(getComputedStyle(box).fontSize)) * 1000;
+  const hold = MARQUEE_DELAY / (MARQUEE_DELAY + travel);
+  run.animate([
+    { transform: 'translateX(0)', offset: 0 },
+    { transform: 'translateX(0)', offset: hold },
+    { transform: `translateX(${-shift}px)`, offset: 1 },
+  ], { duration: MARQUEE_DELAY + travel, iterations: Infinity });
+}
+
+// A line of text that scrolls when it doesn't fit (marquee). Setting the same text
+// again leaves it scrolling where it is, as the pages set their lines over and over.
+function scrollText(box, text) {
+  const width = box.clientWidth;
+  if (box.dataset.text === text && Number(box.dataset.width) === width) return;
+  box.dataset.text = text;
+  box.dataset.width = width;
+  box.classList.remove('scrolling');
+  box.textContent = text;
+  marquee(box);
 }
 
 // An image in a rounded card with the ambient light behind and the system drawing as

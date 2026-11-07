@@ -1,6 +1,31 @@
 <theme>
     <variables>
         <atelierEyebrow>${systemManufacturer}  ·  ${systemReleaseYear}  ·  ${systemHardwareType}</atelierEyebrow>
+        <atelierYear>${systemReleaseYear}</atelierYear>
         <systemArt>./../systems/controllers-tagged/sega32xna.svg</systemArt>
     </variables>
+    <aspectRatio name="16:9">
+        <variables>
+            <roomLightListPos>0.534 0.2925</roomLightListPos>
+            <roomLightListSize>0.5256 0.8</roomLightListSize>
+        </variables>
+    </aspectRatio>
+    <aspectRatio name="16:10">
+        <variables>
+            <roomLightListPos>0.5477 0.2925</roomLightListPos>
+            <roomLightListSize>0.565 0.8</roomLightListSize>
+        </variables>
+    </aspectRatio>
+    <aspectRatio name="21:9">
+        <variables>
+            <roomLightListPos>0.438 0.2925</roomLightListPos>
+            <roomLightListSize>0.4028 0.8</roomLightListSize>
+        </variables>
+    </aspectRatio>
+    <aspectRatio name="4:3">
+        <variables>
+            <roomLightListPos>0.6142 0.2775</roomLightListPos>
+            <roomLightListSize>0.592 0.7</roomLightListSize>
+        </variables>
+    </aspectRatio>
 </theme>

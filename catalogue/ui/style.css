@@ -89,6 +89,16 @@
 .waiting .bar { animation: waiting 1.4s ease-in-out infinite; }
 @keyframes waiting { 50% { opacity: 0.35; } }
 
+/* While the library is read, a soft light of the accent runs along the bar beneath the
+   sections, from end to end, as there is no telling how far the reading is */
+.bar.sweep .fill {
+  width: 30% !important;
+  background: linear-gradient(90deg, transparent, var(--accent) 50%, transparent);
+  transition: none;
+  animation: sweep 1.8s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+}
+@keyframes sweep { from { transform: translateX(-100%); } to { transform: translateX(333.4%); } }
+
 /* How a game stands: a disc with a sign, at the bottom corner of its cover, before its
    state in the lists and before the state of the chosen game. Installed is quiet, to
    install neutral, what asks for something is in the accent: to sync outlined, not

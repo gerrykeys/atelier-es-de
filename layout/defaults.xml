@@ -10,6 +10,9 @@
 <theme>
     <variables>
         <atelierEyebrow>&#160;</atelierEyebrow>
+        <!-- The year behind the drawing in the List variants: systems/eyebrow sets it for
+             the systems that have one, the collections and apps have "Various" -->
+        <atelierYear>&#160;</atelierYear>
         <systemDescription>&#160;</systemDescription>
         <systemCoverSizeType>portrait</systemCoverSizeType>
     </variables>

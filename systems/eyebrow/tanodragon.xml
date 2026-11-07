@@ -1,6 +1,31 @@
 <theme>
     <variables>
         <atelierEyebrow>${systemManufacturer}  ·  ${systemReleaseYear}  ·  ${systemHardwareType}</atelierEyebrow>
+        <atelierYear>${systemReleaseYear}</atelierYear>
         <systemArt>./../systems/controllers-tagged/tanodragon.svg</systemArt>
     </variables>
+    <aspectRatio name="16:9">
+        <variables>
+            <roomLightListPos>0.4382 0.2925</roomLightListPos>
+            <roomLightListSize>0.2521 0.8</roomLightListSize>
+        </variables>
+    </aspectRatio>
+    <aspectRatio name="16:10">
+        <variables>
+            <roomLightListPos>0.4414 0.2925</roomLightListPos>
+            <roomLightListSize>0.2611 0.8</roomLightListSize>
+        </variables>
+    </aspectRatio>
+    <aspectRatio name="21:9">
+        <variables>
+            <roomLightListPos>0.3662 0.2925</roomLightListPos>
+            <roomLightListSize>0.1977 0.8</roomLightListSize>
+        </variables>
+    </aspectRatio>
+    <aspectRatio name="4:3">
+        <variables>
+            <roomLightListPos>0.5029 0.2775</roomLightListPos>
+            <roomLightListSize>0.2739 0.7</roomLightListSize>
+        </variables>
+    </aspectRatio>
 </theme>

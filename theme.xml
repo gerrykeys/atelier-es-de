@@ -11,6 +11,9 @@
     <include>./layout/defaults.xml</include>
     <include>./systems/metadata/_default.xml</include>
     <include>./systems/metadata/${system.theme}.xml</include>
+    <!-- The room light of the List variants on the fallback drawing, for the systems
+         that have no drawing of their own, see tools/build-eyebrows.js -->
+    <include>./systems/eyebrow/_default.xml</include>
     <include>./systems/eyebrow/${system.theme}.xml</include>
     <include>./layout/colors.xml</include>
     <include>./layout/languages.xml</include>
@@ -173,30 +176,45 @@
         <include>./layout/sounds.xml</include>
         <include>./layout/collections.xml</include>
     </variant>
-    <!-- Every variant has a Names twin, the same layouts with the names of the neighboring
-         systems in the carousel: a theme has no other option ES-DE would show in its menu -->
+    <!-- Every variant has two twins, with the same game lists: a theme has no other option
+         ES-DE would show in its menu. The Names twins have the names of the neighboring
+         systems in the carousel, the List twins replace the carousel with a list of the
+         systems. ES-DE takes a single carousel or list in the system view, so the carousel
+         is only defined for the variants that show it -->
+    <variant name="index, indexStill, indexCompact, indexCompactStill, typographic, gallery, grid, indexNames, indexStillNames, indexCompactNames, indexCompactStillNames, typographicNames, galleryNames, gridNames">
+        <include>./layout/system-carousel.xml</include>
+    </variant>
     <variant name="indexNames, indexStillNames, indexCompactNames, indexCompactStillNames, typographicNames, galleryNames, gridNames">
         <include>./layout/system-names.xml</include>
     </variant>
+    <!-- On "automatic" transitions the List twins change the page at once between systems,
+         see tools/build-capabilities.js -->
+    <variant name="indexList, indexStillList, indexCompactList, indexCompactStillList, typographicList, galleryList, gridList">
+        <transitions>softList</transitions>
+        <include>./layout/system-list.xml</include>
+    </variant>
     <!-- The compact Index variants are the Index without the large title, see the
          aspect ratio files -->
-    <variant name="index, indexStill, indexCompact, indexCompactStill, typographic, indexNames, indexStillNames, indexCompactNames, indexCompactStillNames, typographicNames">
+    <variant name="index, indexStill, indexCompact, indexCompactStill, typographic, indexNames, indexStillNames, indexCompactNames, indexCompactStillNames, typographicNames, indexList, indexStillList, indexCompactList, indexCompactStillList, typographicList">
         <include>./layout/gamelist-list.xml</include>
         <include>./layout/gamelist-details.xml</include>
     </variant>
-    <variant name="index, indexCompact, indexNames, indexCompactNames">
+    <variant name="index, indexStill, indexCompact, indexCompactStill, indexNames, indexStillNames, indexCompactNames, indexCompactStillNames, indexList, indexStillList, indexCompactList, indexCompactStillList">
+        <include>./layout/gamelist-index.xml</include>
+    </variant>
+    <variant name="index, indexCompact, indexNames, indexCompactNames, indexList, indexCompactList">
         <include>./layout/gamelist-media-video.xml</include>
     </variant>
-    <variant name="indexStill, indexCompactStill, indexStillNames, indexCompactStillNames">
+    <variant name="indexStill, indexCompactStill, indexStillNames, indexCompactStillNames, indexStillList, indexCompactStillList">
         <include>./layout/gamelist-media-still.xml</include>
     </variant>
-    <variant name="typographic, typographicNames">
+    <variant name="typographic, typographicNames, typographicList">
         <include>./layout/gamelist-typographic.xml</include>
     </variant>
-    <variant name="gallery, galleryNames">
+    <variant name="gallery, galleryNames, galleryList">
         <include>./layout/gamelist-gallery.xml</include>
     </variant>
-    <variant name="grid, gridNames">
+    <variant name="grid, gridNames, gridList">
         <include>./layout/gamelist-details.xml</include>
         <include>./layout/gamelist-media-video.xml</include>
         <include>./layout/gamelist-grid.xml</include>

@@ -435,7 +435,7 @@ function confirmArchive(archive, go) {
   const C = T.collections;
   openOverlay({
     title: C.archiveTitle(archive.count),
-    text: C.archiveText(archive.count, archive.first, bytes(archive.size)),
+    text: C.archiveText(archive.count, archive.first, withMedia(bytes(archive.size), mediaSize(archive.media, 'archiveMedia'), ' · ')),
     rows: [
       { label: C.addAndArchive, run: () => { closeOverlay(); go(); } },
       { label: T.confirm.cancel, separated: true, run: closeOverlay },
@@ -504,6 +504,7 @@ function openCollectionMenu(c) {
   const rows = [{ label: C.addGames, run: () => { closeOverlay(); state.collection = c.id; openSearch(); } }];
   if (c.search) rows.push({ label: C.editSearch, run: () => { closeOverlay(); state.collection = c.id; openSearch(c.search); } });
   if (c.install) {
+    // No room beside these labels for the media
     rows.push({ label: C.installAll(number(c.install)), note: bytes(c.installSize), separated: true,
       run: () => { closeOverlay(); enqueue('download', { collection: c.id, where: 'remote' }); } });
   }
@@ -533,10 +534,10 @@ async function openMemberActions() {
   if (!a) return;
   const rows = [];
   if (a.install.count) {
-    rows.push({ label: A.download, note: note(a.install.count, a.install.size), run: () => { closeOverlay(); enqueue('download', { ids, where: 'remote' }); } });
+    rows.push({ label: A.download, note: note(a.install.count, a.install.size, mediaSize(a.install.media, 'downloadMedia')), run: () => { closeOverlay(); enqueue('download', { ids, where: 'remote' }); } });
   }
   if (a.unarchived.count) {
-    rows.push({ label: A.archive, note: note(a.unarchived.count, a.unarchived.size), run: () => { closeOverlay(); enqueue('archive', { ids, where: 'unarchived' }); } });
+    rows.push({ label: A.archive, note: note(a.unarchived.count, a.unarchived.size, mediaSize(a.unarchived.media, 'archiveMedia')), run: () => { closeOverlay(); enqueue('archive', { ids, where: 'unarchived' }); } });
   }
   rows.push({ label: C.takeOut, separated: rows.length > 0, run: () => { closeOverlay(); takeOut(c, ids); } });
   if (ids.length === 1 && g) rows.push({ label: C.openInCatalogue, run: () => showInCatalogue(g) });

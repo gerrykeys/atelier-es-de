@@ -1,0 +1,24 @@
+<!--
+    The Index title: a single line beside the first row of the list, so that the details
+    beneath it start higher and the description gets the room. A title wider than its
+    column scrolls sideways, as the Gallery title does.
+
+    It is centered on its capitals, which ES-DE centers in the line whatever the line
+    spacing. The aspect ratio files place it per font size (indexTitlePos), so that its
+    capitals start where those of the first row of the list do. The line spacing only
+    sets the height of the strip a scrolling text is clipped to: at 1.5 the descenders
+    stay whole.
+-->
+
+<theme>
+    <view name="gamelist">
+        <text name="gameTitle">
+            <verticalAlignment>center</verticalAlignment>
+            <lineSpacing>1.5</lineSpacing>
+            <container>true</container>
+            <containerType>horizontal</containerType>
+            <containerStartDelay>2.5</containerStartDelay>
+            <containerScrollSpeed>0.7</containerScrollSpeed>
+        </text>
+    </view>
+</theme>

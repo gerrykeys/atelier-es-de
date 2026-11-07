@@ -358,7 +358,8 @@ function Invoke-CollectionsRequest($body) {
         if (-not $c) { $answer.ok = $false; $answer.reason = 'gone'; break }
         $plan = Get-AddPlan $c $body
         $answer.fresh = $plan.fresh.Count
-        $answer.archive = @{ count = $plan.archive.Count; size = $plan.archiveSize; first = $(if ($plan.archive.Count) { $plan.archive[0].Name } else { $null }) }
+        $answer.archive = @{ count = $plan.archive.Count; size = $plan.archiveSize; media = $plan.archiveMedia
+          first = $(if ($plan.archive.Count) { $plan.archive[0].Name } else { $null }) }
         $answer.names = @(for ($i = 0; $i -lt [Math]::Min(3, $plan.fresh.Count); $i++) { $plan.fresh[$i].Name })
         if ($action -ceq 'plan-add' -or -not $plan.fresh.Count) { $changed = $false; break }
         if (-not (Update-Collection $root @{ id = $c.id; add = (Get-CollectionEntries $plan.add); include = [string[]]$plan.include } $App.Device)) { $answer.ok = $false; $answer.reason = 'gone' }
@@ -382,8 +383,8 @@ function Invoke-CollectionsRequest($body) {
         $search = Read-CollectionSearch $body['search']
         $found = [Atelier.CollectionGames]::OnlyInEsde([Atelier.Library]::Pick([Atelier.Library]::SearchIds($search), $null, $null), [Atelier.Library]::CollectionIds($c.id, 'all'))
         $archive = $found['games']
-        $size = $found['size']
-        $answer.archive = @{ count = $archive.Count; size = $size; first = $(if ($archive.Count) { $archive[0].Name } else { $null }) }
+        $answer.archive = @{ count = $archive.Count; size = $found['size']; media = $found['media']
+          first = $(if ($archive.Count) { $archive[0].Name } else { $null }) }
         if ($action -ceq 'plan-auto') { $changed = $false; break }
         if (-not (Update-Collection $root @{ id = $c.id; search = $search } $App.Device)) { $answer.ok = $false; $answer.reason = 'gone' }
         elseif ($archive.Count) { [void](Add-CatalogueJobs 'archive' $archive $false) }

@@ -1,5 +1,30 @@
 <theme>
     <variables>
         <atelierEyebrow>${systemManufacturer}  ·  ${systemReleaseYear}  ·  ${systemHardwareType}</atelierEyebrow>
+        <atelierYear>${systemReleaseYear}</atelierYear>
     </variables>
+    <aspectRatio name="16:9">
+        <variables>
+            <roomLightListPos>0.4508 0.2925</roomLightListPos>
+            <roomLightListSize>0.288 0.8</roomLightListSize>
+        </variables>
+    </aspectRatio>
+    <aspectRatio name="16:10">
+        <variables>
+            <roomLightListPos>0.4553 0.2925</roomLightListPos>
+            <roomLightListSize>0.301 0.8</roomLightListSize>
+        </variables>
+    </aspectRatio>
+    <aspectRatio name="21:9">
+        <variables>
+            <roomLightListPos>0.3756 0.2925</roomLightListPos>
+            <roomLightListSize>0.2246 0.8</roomLightListSize>
+        </variables>
+    </aspectRatio>
+    <aspectRatio name="4:3">
+        <variables>
+            <roomLightListPos>0.5175 0.2775</roomLightListPos>
+            <roomLightListSize>0.3156 0.7</roomLightListSize>
+        </variables>
+    </aspectRatio>
 </theme>

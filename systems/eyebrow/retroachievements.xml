@@ -3,4 +3,28 @@
         <atelierEyebrow>${systemHardwareType}</atelierEyebrow>
         <gameCountVisible>false</gameCountVisible>
     </variables>
+    <aspectRatio name="16:9">
+        <variables>
+            <roomLightListPos>0.4805 0.2925</roomLightListPos>
+            <roomLightListSize>0.3729 0.8</roomLightListSize>
+        </variables>
+    </aspectRatio>
+    <aspectRatio name="16:10">
+        <variables>
+            <roomLightListPos>0.4883 0.2925</roomLightListPos>
+            <roomLightListSize>0.3952 0.8</roomLightListSize>
+        </variables>
+    </aspectRatio>
+    <aspectRatio name="21:9">
+        <variables>
+            <roomLightListPos>0.3979 0.2925</roomLightListPos>
+            <roomLightListSize>0.2882 0.8</roomLightListSize>
+        </variables>
+    </aspectRatio>
+    <aspectRatio name="4:3">
+        <variables>
+            <roomLightListPos>0.552 0.2775</roomLightListPos>
+            <roomLightListSize>0.4143 0.7</roomLightListSize>
+        </variables>
+    </aspectRatio>
 </theme>

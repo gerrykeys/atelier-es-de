@@ -54,7 +54,13 @@ const PAGE = 150;
 
 const sizeOf = g => (g.local ? g.local.size : g.archive ? g.archive.size : 0);
 const libraryVersion = () => (library.summary ? library.summary.version : 0);
-const libraryReady = () => Boolean(library.summary && library.summary.ready);
+// Whether the page has the library as the server read it last. Not while the server
+// reads it, the first time or again after another archive or other media to compare
+// were chosen: what the page had then is no longer so, and an archive just chosen
+// would look empty, so the page waits for it as for the first reading.
+const libraryReady = () => Boolean(library.summary && library.summary.ready && !library.summary.building);
+// The library couldn't be read, and isn't being read again
+const libraryFailed = () => Boolean(library.summary && !library.summary.ready && !library.summary.building && library.summary.error);
 
 // How a game stands, as its icon shows it: installed (in ES-DE and in the archive, the
 // same), sync (in both, but changed in ES-DE since it was archived: the archive's folder
@@ -80,6 +86,20 @@ function bytes(n) {
   const unit = Math.min(T.units.length - 1, Math.floor(Math.log(n) / Math.log(1024)));
   const value = n / 1024 ** unit;
   return `${new Intl.NumberFormat(locale(), { maximumFractionDigits: value < 10 && unit ? 1 : 0 }).format(value)} ${T.units[unit]}`;
+}
+
+// The size of media by type ({ type: size }): of every type, or of those a setting
+// chooses (archiveMedia, downloadMedia), the ones a transfer takes
+function mediaSize(byType, key) {
+  if (!byType) return 0;
+  const types = key ? S.config[key] || [] : Object.keys(byType);
+  return types.reduce((n, t) => n + (byType[t] || 0), 0);
+}
+
+// A size in words, then the size of the media that go with it when there are any:
+// "1,2 GB  ·  media 85 MB". The size of the games never counts their media.
+function withMedia(text, media, sep = '  ·  ') {
+  return media ? `${text}${sep}${T.mediaSize(bytes(media))}` : text;
 }
 
 // A folder as a short name: its first and last parts, "NAS › retro"
@@ -229,7 +249,7 @@ function buildLibrary() {
   G.otherButton = el('span', 'art', G.other);
   G.otherName = el('span', '', G.other);
   G.corner = corner(root, l);
-  G.overview = progressBlock(root, b.left, b.top + 0.012, b.right - b.left);
+  G.overview = progressBlock(root, b.left, b.top + 0.012, b.right - b.left, { scroll: true });
   G.tabs = place(el('div', 'tabs', root), { pos: [b.left, b.top + 0.012], size: [b.right - b.left, 0.04] }, { origin: [0, 0.5] });
   G.shelves = place(el('div', 'shelves', root),
     { pos: [b.left - SHELF_PAD, b.top + OVERVIEW], size: [b.right - b.left + 2 * SHELF_PAD, b.bottom - b.top - OVERVIEW + 0.02] });
@@ -244,12 +264,16 @@ function buildLibrary() {
   G.caption = place(el('div', 'line caps caption', root), l.genre, { line: true });
   G.tag = tag(root, l);
   const d = l.description;
-  G.status = progressBlock(root, d.pos[0], d.pos[1] + 0.018, d.size[0]);
+  G.status = progressBlock(root, d.pos[0], d.pos[1] + 0.018, d.size[0], { scroll: true });
   G.media = mediaCard(root, l, 'videoStill');
   G.facts = [
     fact(root, l, 'labelReleased', 'releaseDate'), fact(root, l, 'labelDeveloper', 'developer'),
     fact(root, l, 'labelPublisher', 'publisher'), fact(root, l, 'labelPlayers', 'players'),
   ];
+  // What a game's facts show, place by place. Where the theme leaves the publisher out
+  // (4:3), its saves are left out with it, and when it was archived takes the developer's
+  // place, the one with room for two lines.
+  G.gameFacts = l.labelPublisher && l.labelPublisher.pos ? ['size', 'media', 'archived', 'saves'] : ['size', 'archived', 'saves', 'media'];
   G.next = place(el('div', 'next', root), l.badges);
   G.tiles = new Map();
 }
@@ -410,12 +434,10 @@ function sectionCount(s, section = state.filter) {
 
 // The counts and sizes of a few platforms together
 function aggregate(systems) {
-  const a = { counts: [0, 0, 0, 0, 0], packed: 0, size: 0, upload: 0 };
+  const a = { counts: [0, 0, 0, 0, 0], packed: 0, size: 0, upload: 0, archiveMedia: 0, localMedia: 0, uploadMedia: 0 };
   for (const s of systems) {
     s.counts.forEach((c, i) => { a.counts[i] += c; });
-    a.packed += s.packed;
-    a.size += s.size;
-    a.upload += s.upload;
+    for (const k of ['packed', 'size', 'upload', 'archiveMedia', 'localMedia', 'uploadMedia']) a[k] += s[k] || 0;
   }
   return a;
 }
@@ -429,14 +451,15 @@ function sectionLine(a, section = state.filter) {
   if (section === 'archive') {
     const n = installed + sync + download + unavailable;
     return { label: O.label.archive, fraction: n ? (installed + sync) / n : 0, text: n ? [O.installed(number(installed + sync), number(n)),
-      download && O.toInstall(number(download)), unavailable && O.unavailable(number(unavailable)), bytes(a.packed)].filter(Boolean).join('  ·  ') : '' };
+      download && O.toInstall(number(download)), unavailable && O.unavailable(number(unavailable)), withMedia(bytes(a.packed), a.archiveMedia)]
+      .filter(Boolean).join('  ·  ') : '' };
   }
   if (section === 'local') {
     const n = installed + sync + upload;
     return { label: O.label.local, fraction: n ? installed / n : 0, text: n ? [O.archived(number(installed), number(n)),
-      sync && O.toSync(number(sync)), upload && O.unarchived(number(upload))].filter(Boolean).join('  ·  ') : '' };
+      sync && O.toSync(number(sync)), upload && O.unarchived(number(upload)), withMedia(bytes(a.size), a.localMedia)].filter(Boolean).join('  ·  ') : '' };
   }
-  return { label: O.label.unarchived, fraction: 0, text: upload ? `${O.toArchive(number(upload))}  ·  ${bytes(a.upload)}` : '' };
+  return { label: O.label.unarchived, fraction: 0, text: upload ? withMedia(`${O.toArchive(number(upload))}  ·  ${bytes(a.upload)}`, a.uploadMedia) : '' };
 }
 
 // The platforms with games in the section, by name: [{ key, system, title, count, s }]
@@ -456,10 +479,12 @@ function renderTabs() {
       f => (!c ? 0 : f === 'all' ? c.games : f === 'local' ? c.local : c.games - c.local)],
     search: [WHERE, state.where, f => T.search.where[f], f => counts[f] || 0],
   }[state.view] || [FILTERS, state.filter, f => T.filters[f], f => systemsOf().reduce((sum, s) => sum + sectionCount(s, f), 0)];
+  // The sections have no count while the library is read
+  const counted = state.view === 'collection' || state.view === 'search' || libraryReady();
   G.tabs.replaceChildren(...filters.map(f => {
     const n = count(f);
-    const tab = el('span', `tab${f === chosen ? ' active' : ''}${n ? '' : ' empty'}`, null, label(f));
-    el('span', 'count', tab, number(n));
+    const tab = el('span', `tab${f === chosen ? ' active' : ''}${n || !counted ? '' : ' empty'}`, null, label(f));
+    if (counted) el('span', 'count', tab, number(n));
     return tab;
   }));
   // Where the line is too short for all of them, as on a 4:3 screen, it slides to keep
@@ -470,9 +495,10 @@ function renderTabs() {
 
 // How the games of the section stand, those of the open platform, or all of them only
 // in Not archived; or the transfer under way, in words beneath a bar; the sections take
-// the whole line above it
+// the whole line above it. While the library is read, a light runs along the bar.
 function renderOverview() {
   const job = jobs.current;
+  G.overview.track.classList.toggle('sweep', !job && !blocked() && !libraryReady() && !libraryFailed());
   if (job) {
     const batch = jobs.batch || { total: 1, done: 0 };
     const fraction = (batch.done + (job.fraction || 0)) / Math.max(1, batch.total);
@@ -482,7 +508,8 @@ function renderOverview() {
     return;
   }
   if (blocked()) return G.overview('', null, '');
-  if (!libraryReady()) return G.overview('', null, T.reading, false, 0);
+  // In the Catalogue the message beneath says it in full
+  if (!libraryReady()) return G.overview('', null, state.section === 'collections' ? T.reading : '', false, 0);
   if (state.section === 'collections') return overviewCollections();
   const s = state.view === 'games' ? systemOf(state.platform) : null;
   if (!s && state.filter !== 'unarchived') return G.overview('', null, '');
@@ -607,8 +634,9 @@ const blocked = () => !library.location || !library.location.ok || !library.loca
 // The page as it is now: the platforms or the games of the open one, or the collections,
 // one of them or its search; keepId keeps a game chosen when the games are drawn again
 function renderLibrary(keepId) {
-  // Without an archive the page only says why, and how to choose one, in the Catalogue
-  platforms = blocked() ? [] : platformData();
+  // Without an archive the page only says why, and how to choose one, in the Catalogue;
+  // while the library is read, that it is
+  platforms = blocked() || !libraryReady() ? [] : platformData();
   if (blocked()) {
     enterSection('catalogue');
     state.view = 'platforms';
@@ -672,10 +700,9 @@ function highlightRow(n) {
 function renderPlatforms() {
   setHeader(null);
   drawRows(platforms.map(p => ({ art: e => setArt(e, p.system), name: p.title, note: T.games(number(p.count)) })));
-  G.info.textContent = blocked() ? '' : T.platforms(number(platforms.length));
+  G.info.textContent = blocked() || !libraryReady() ? '' : T.platforms(number(platforms.length));
   if (!blocked()) {
-    const error = library.summary && library.summary.error;
-    if (!libraryReady() && error && !library.summary.building) message(G.message, T.messages.readFailed, error);
+    if (libraryFailed()) message(G.message, T.messages.readFailed, library.summary.error);
     else if (!libraryReady()) message(G.message, T.messages.reading, T.messages.readingText);
     else emptySection(platforms.length);
   }
@@ -724,6 +751,7 @@ function showPlatform(p) {
   G.caption.textContent = T.games(number(p.count));
   G.tag([inEsde && T.tags.local, inArchive && T.tags.archive]);
   G.status(line.label, null, line.text, false, line.fraction);
+  // No room beside these for the media: the line of the section has them
   G.facts[0](P.archive, inArchive ? `${number(inArchive)}  ·  ${bytes(s.packed)}` : null);
   G.facts[1](P.local, inEsde ? `${number(inEsde)}  ·  ${bytes(s.size)}` : null);
   G.facts[2](P.unarchived, upload ? `${number(upload)}  ·  ${bytes(s.upload)}` : null);
@@ -739,7 +767,8 @@ function renderGames(keepId) {
   // While the server reads the library, there is no list to show yet
   if (!libraryReady()) {
     drawRows([]);
-    message(G.message, T.messages.reading, T.messages.readingText);
+    if (libraryFailed()) message(G.message, T.messages.readFailed, library.summary.error);
+    else message(G.message, T.messages.reading, T.messages.readingText);
     return clearDetails();
   }
   const system = state.platform;
@@ -1030,11 +1059,16 @@ function showGame() {
   G.tag([row.local && T.tags.local, row.archive && T.tags.archive, member && T.collections.inCollection,
     state.marked.has(row.id) && T.tags.marked]);
   showState(row);
-  G.facts[0](T.facts.size, row.local && row.archive ? `${bytes(row.local.size)}  ·  ${T.packed(bytes(row.archive.packed))}`
-    : row.archive ? T.packed(bytes(row.archive.packed)) : bytes(row.local.size));
-  G.facts[1](T.facts.archived, row.archive ? [date(row.archive.archived), d && d.archive && d.archive.device].filter(Boolean).join('  ·  ') : null);
-  G.facts[2](T.facts.saves, d && d.saves ? T.savesState[d.saves.status] : null);
-  G.facts[3](S.labels.langReleased || T.facts.released, d && d.fields.released ? d.fields.released : null);
+  // The media of ES-DE when it has the game, as for its size, else the archive's
+  const media = row.local ? row.local.media : row.archive.media;
+  const facts = {
+    size: [T.facts.size, row.local && row.archive ? `${bytes(row.local.size)}  ·  ${T.packed(bytes(row.archive.packed))}`
+      : row.archive ? T.packed(bytes(row.archive.packed)) : bytes(row.local.size)],
+    media: [T.facts.media, media ? bytes(media) : null],
+    archived: [T.facts.archived, row.archive ? [date(row.archive.archived), d && d.archive && d.archive.device].filter(Boolean).join('  ·  ') : null],
+    saves: [T.facts.saves, d && d.saves ? T.savesState[d.saves.status] : null],
+  };
+  G.gameFacts.forEach((k, i) => G.facts[i](...facts[k]));
 
   const atmosphere = document.getElementById('atmosphere');
   atmosphere.classList.remove('shown');
@@ -1072,7 +1106,7 @@ function showState(g) {
     el('span', '', G.next, failure);
   } else if (d) {
     const f = d.fields;
-    const words = [f.developer, f.genre, f.players && `${S.labels.langPlayers || T.facts.players} ${f.players}`];
+    const words = [f.developer, f.released, f.genre, f.players && `${S.labels.langPlayers || T.facts.players} ${f.players}`];
     el('span', '', G.next, words.filter(Boolean).join('  ·  '));
   }
 }
@@ -1113,15 +1147,13 @@ function watchBuild() {
     let r = null;
     try { r = await api('/api/summary'); } catch { r = null; }
     if (!r) return watchBuild();
-    const wasReady = libraryReady();
     applyAnswer(r, false);
-    if (r.library.ready && !r.library.building) {
+    if (libraryReady()) {
       renderLibrary(selectedId());
       return syncMatches();
     }
     // It couldn't be read: the page says why
-    if (!r.library.building && r.library.error) return renderLibrary(selectedId());
-    if (!wasReady && r.library.ready) renderLibrary(selectedId());
+    if (libraryFailed()) return renderLibrary(selectedId());
     renderOverview();
     watchBuild();
   }, 400);
@@ -1272,8 +1304,10 @@ function nextConflict(conflicts) {
 
 // Actions
 
-function note(count, size) {
-  return count > 1 ? `${number(count)}  ·  ${bytes(size)}` : bytes(size);
+// How many games and how much a transfer takes: their size, then their media's
+function note(count, size, media) {
+  const text = withMedia(bytes(size), media);
+  return count > 1 ? `${number(count)}  ·  ${text}` : text;
 }
 
 // The actions for a few games, as the server counts them (/api/actions): those that make
@@ -1284,7 +1318,7 @@ function actionRows(a, single, target) {
   const archive = a.archive;
   if (archive.count) {
     rows.push({ label: single ? { local: A.archive, changed: A.archiveAgain }[archive.first] : a.allFresh ? A.archiveNew : A.archiveMany,
-      note: note(archive.count, archive.size), run: () => { closeOverlay(); enqueue('archive', target); } });
+      note: note(archive.count, archive.size, mediaSize(archive.media, 'archiveMedia')), run: () => { closeOverlay(); enqueue('archive', target); } });
   }
   const detailsCount = a['update-details'].count;
   if (detailsCount) {
@@ -1294,7 +1328,7 @@ function actionRows(a, single, target) {
   const download = a.download;
   if (download.count) {
     rows.push({ label: single ? { remote: A.download, changed: A.downloadAgain }[download.first] : A.downloadMany,
-      note: note(download.count, download.size), run: () => { closeOverlay(); enqueue('download', target); } });
+      note: note(download.count, download.size, mediaSize(download.media, 'downloadMedia')), run: () => { closeOverlay(); enqueue('download', target); } });
   }
   if (a['upload-saves'].count) {
     rows.push({ label: A.uploadSaves, note: single ? '' : number(a['upload-saves'].count), run: () => saveTransfer('upload-saves', a) });
@@ -1458,6 +1492,10 @@ function renderOverlay() {
   if (o.build) o.rows = o.build();
   o.selected = clamp(o.selected, 0, o.rows.length - 1);
   G.menu.show(o.title, o.rows, o.selected, o.text, o.cls);
+  // The selected row scrolls when its label and note don't fit, as the selected game
+  // of a list does in ES-DE
+  const label = G.menu.root.querySelector('.menu-row.selected .menu-label');
+  if (label) marquee(label);
 }
 
 function actOverlay(action) {

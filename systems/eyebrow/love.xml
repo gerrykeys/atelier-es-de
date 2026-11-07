@@ -1,0 +1,28 @@
+<theme>
+    <variables>
+    </variables>
+    <aspectRatio name="16:9">
+        <variables>
+            <roomLightListPos>0.4755 0.2925</roomLightListPos>
+            <roomLightListSize>0.3586 0.8</roomLightListSize>
+        </variables>
+    </aspectRatio>
+    <aspectRatio name="16:10">
+        <variables>
+            <roomLightListPos>0.4828 0.2925</roomLightListPos>
+            <roomLightListSize>0.3794 0.8</roomLightListSize>
+        </variables>
+    </aspectRatio>
+    <aspectRatio name="21:9">
+        <variables>
+            <roomLightListPos>0.3941 0.2925</roomLightListPos>
+            <roomLightListSize>0.2775 0.8</roomLightListSize>
+        </variables>
+    </aspectRatio>
+    <aspectRatio name="4:3">
+        <variables>
+            <roomLightListPos>0.5462 0.2775</roomLightListPos>
+            <roomLightListSize>0.3977 0.7</roomLightListSize>
+        </variables>
+    </aspectRatio>
+</theme>

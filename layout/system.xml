@@ -1,40 +1,12 @@
 <!--
-    System view: a carousel of line drawings with the selected system large in the
-    middle and its neighbours smaller and dimmed on either side, the name and caption
-    set centered beneath it.
-
-    The carousel spans the whole screen and paints the page background itself, so
-    with fade transitions only the text fades while the drawings keep sliding and the
-    page never dips to black.
+    System view: what every variant shows of the selected system, its name, a caption
+    with its maker, year and kind, a few lines of its history and the number of games.
+    The carousel that chooses it is in system-carousel.xml, the list of the List
+    variants in system-list.xml, which also moves and aligns these elements.
 -->
 
 <theme>
     <view name="system">
-        <image name="background">
-            <visible>false</visible>
-        </image>
-
-        <carousel name="systemCarousel">
-            <type>horizontal</type>
-            <pos>0 0</pos>
-            <size>1 1</size>
-            <origin>0 0</origin>
-            <staticImage>${systemArt}</staticImage>
-            <defaultImage>${artFallback}</defaultImage>
-            <itemVerticalAlignment>center</itemVerticalAlignment>
-            <imageFit>contain</imageFit>
-            <imageInterpolation>linear</imageInterpolation>
-            <imageColor>${artColor}</imageColor>
-            <unfocusedItemOpacity>0.28</unfocusedItemOpacity>
-            <fastScrolling>true</fastScrolling>
-            <color>${bgColor}</color>
-            <fontPath>${fontDisplay}</fontPath>
-            <textColor>${titleColor}</textColor>
-            <letterCaseAutoCollections>capitalize</letterCaseAutoCollections>
-            <fadeAbovePrimary>true</fadeAbovePrimary>
-            <zIndex>20</zIndex>
-        </carousel>
-
         <!-- Atmosphere color schemes: a soft light of the system color around the
              selected drawing. It sits above the carousel, which paints the background,
              so it fades with the text when moving between systems. -->

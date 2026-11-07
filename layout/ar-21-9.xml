@@ -2,7 +2,7 @@
     Layout for 21:9 displays (for example 2560x1080, 3440x1440).
 
     Grid: outer margin 0.07, header at 0.085, content from 0.175 to 0.845, footer at 0.93.
-    Index columns: list 0.07-0.305, media 0.345-0.6, details 0.645-0.93.
+    Index columns: list 0.07-0.305, media 0.345-0.6107, details 0.645-0.93.
     Grid variant: covers 0.07-0.565, then title, description and the media card
     (0.51-0.82) with the facts beside it in the 0.61-0.93 column.
 -->
@@ -10,27 +10,33 @@
 <theme>
     <!-- The clock ends the header line, with Wi-Fi and then the battery to its left, one
          entry spacing (0.008) apart. Wi-Fi is placed by the widest time, 00:00, which is
-         3.37 em of the status size; other times leave a little more room -->
+         3.37 em of the status size; other times leave a little more room.
+         The Index title starts its capitals where the first row of the list does, at the
+         heights of 16:9 (see ar-16-9.xml) -->
     <variables>
         <wifiPos>0.888 0.085</wifiPos>
         <statusPos>0.87 0.085</statusPos>
+        <indexTitlePos>0.645 0.2073</indexTitlePos>
     </variables>
     <fontSize name="small">
         <variables>
             <wifiPos>0.892 0.085</wifiPos>
             <statusPos>0.875 0.085</statusPos>
+            <indexTitlePos>0.645 0.2035</indexTitlePos>
         </variables>
     </fontSize>
     <fontSize name="large">
         <variables>
             <wifiPos>0.882 0.085</wifiPos>
             <statusPos>0.862 0.085</statusPos>
+            <indexTitlePos>0.645 0.2124</indexTitlePos>
         </variables>
     </fontSize>
     <fontSize name="x-large">
         <variables>
             <wifiPos>0.875 0.085</wifiPos>
             <statusPos>0.853 0.085</statusPos>
+            <indexTitlePos>0.645 0.2127</indexTitlePos>
         </variables>
     </fontSize>
 
@@ -50,6 +56,29 @@
             </clock>
         </view>
 
+        <!-- Custom collection header, see collections.xml -->
+        <view name="gamelist">
+            <text name="collectionTitle">
+                <pos>0.118 0.085</pos>
+                <origin>0 0.5</origin>
+                <size>0.6 0.06</size>
+            </text>
+            <text name="collectionPlatform">
+                <pos>0.118 0.128</pos>
+                <origin>0 0.5</origin>
+                <size>0.6 0.03</size>
+            </text>
+            <text name="collectionName">
+                <pos>0.93 0.86</pos>
+                <origin>1 1</origin>
+                <size>0.6 0.55</size>
+                <fontSize>0.19</fontSize>
+            </text>
+        </view>
+    </variant>
+
+    <!-- The system carousel, see layout/system-carousel.xml -->
+    <variant name="index, indexStill, indexCompact, indexCompactStill, typographic, gallery, grid, indexNames, indexStillNames, indexCompactNames, indexCompactStillNames, typographicNames, galleryNames, gridNames">
         <view name="system">
             <carousel name="systemCarousel">
                 <itemSize>0.17 0.24</itemSize>
@@ -83,25 +112,6 @@
                 <size>0.4 0.04</size>
             </text>
         </view>
-        <!-- Custom collection header, see collections.xml -->
-        <view name="gamelist">
-            <text name="collectionTitle">
-                <pos>0.118 0.085</pos>
-                <origin>0 0.5</origin>
-                <size>0.6 0.06</size>
-            </text>
-            <text name="collectionPlatform">
-                <pos>0.118 0.128</pos>
-                <origin>0 0.5</origin>
-                <size>0.6 0.03</size>
-            </text>
-            <text name="collectionName">
-                <pos>0.93 0.86</pos>
-                <origin>1 1</origin>
-                <size>0.6 0.55</size>
-                <fontSize>0.19</fontSize>
-            </text>
-        </view>
     </variant>
 
     <!-- The Names variants, see layout/system-names.xml. The carousel items gain the strips
@@ -119,7 +129,73 @@
         </view>
     </variant>
 
-    <variant name="index, indexStill, indexCompact, indexCompactStill, typographic, indexNames, indexStillNames, indexCompactNames, indexCompactStillNames, typographicNames">
+    <!-- The List variants, see layout/system-list.xml: the list of systems where the
+         Index has its list of games, the selected system described from the media
+         column (0.345), laid out as in 16:9. The history keeps to a comfortable line
+         length rather than the whole width, and the year ends where it does, so that it
+         stays beside the drawing -->
+    <variant name="indexList, indexStillList, indexCompactList, indexCompactStillList, typographicList, galleryList, gridList">
+        <view name="system">
+            <textlist name="systemList">
+                <pos>0.07 0.175</pos>
+                <origin>0 0</origin>
+                <size>0.235 0.65</size>
+                <horizontalMargin>0.0085</horizontalMargin>
+                <selectorWidth>0.0009</selectorWidth>
+                <selectorHeight>${selectorH}</selectorHeight>
+                <selectorVerticalOffset>${selectorY}</selectorVerticalOffset>
+            </textlist>
+            <image name="listFade">
+                <pos>0.297 0.175</pos>
+                <origin>1 0</origin>
+                <size>0.028 0.65</size>
+            </image>
+            <image name="systemArt">
+                <pos>0.345 0.41</pos>
+                <origin>0 1</origin>
+                <maxSize>0.26 0.235</maxSize>
+            </image>
+            <!-- Centered on the drawing, set for each system by systems/eyebrow -->
+            <image name="roomLight">
+                <pos>${roomLightListPos}</pos>
+                <size>${roomLightListSize}</size>
+            </image>
+            <text name="releaseYear">
+                <pos>0.765 0.2925</pos>
+                <origin>1 0.5</origin>
+                <size>0.42 0.3</size>
+                <fontSize>0.23</fontSize>
+            </text>
+            <text name="systemTitle, autoCollectionTitle, customCollectionTitle">
+                <pos>0.345 0.545</pos>
+                <origin>0 1</origin>
+                <size>0.585 0.135</size>
+                <fontSize>${gameTitleSize}</fontSize>
+            </text>
+            <image name="captionRule">
+                <pos>0.3455 0.58</pos>
+                <origin>0 0.5</origin>
+                <size>0.014 0.0016</size>
+            </image>
+            <text name="caption">
+                <pos>0.3655 0.58</pos>
+                <origin>0 0.5</origin>
+                <size>0.5645 0.04</size>
+            </text>
+            <text name="description">
+                <pos>0.345 0.615</pos>
+                <origin>0 0</origin>
+                <size>0.42 0.21</size>
+            </text>
+            <text name="gameCount">
+                <pos>0.345 0.865</pos>
+                <origin>0 0.5</origin>
+                <size>0.585 0.04</size>
+            </text>
+        </view>
+    </variant>
+
+    <variant name="index, indexStill, indexCompact, indexCompactStill, typographic, indexNames, indexStillNames, indexCompactNames, indexCompactStillNames, typographicNames, indexList, indexStillList, indexCompactList, indexCompactStillList, typographicList">
         <view name="gamelist">
             <text name="header">
                 <pos>0.118 0.085</pos>
@@ -153,179 +229,187 @@
         </view>
     </variant>
 
-    <variant name="index, indexStill, indexCompact, indexCompactStill, indexNames, indexStillNames, indexCompactNames, indexCompactStillNames">
+    <variant name="index, indexStill, indexCompact, indexCompactStill, indexNames, indexStillNames, indexCompactNames, indexCompactStillNames, indexList, indexStillList, indexCompactList, indexCompactStillList">
         <view name="gamelist">
+            <!-- The media card starts at 0.345 0.175 and is 0.265698 x 0.472222: 4:3 within 1%
+                 at 3440x1440, and an even number of whole pixels there, where ES-DE then
+                 rounds the card, the stills and the videos of any size to the same pixels.
+                 No width is whole at both 3440 and 2560: at 2560x1080 a few media sizes can
+                 still land 1 px off. The card is placed as the media are, see ar-16-9.xml.
+                 The details column beside it starts with the title on one line, at the
+                 first row of the list, then the caption and the facts, and the description
+                 follows them down the column, eight lines. The play statistics and the
+                 badges are beneath the card, as in the compact Index -->
             <image name="mediaAmbient">
-                <pos>0.4725 0.4035</pos>
+                <pos>0.477849 0.411111</pos>
                 <origin>0.5 0.5</origin>
-                <size>0.3391 0.658</size>
+                <size>0.3527 0.68</size>
             </image>
             <image name="mediaMatte">
-                <pos>0.345 0.175</pos>
-                <origin>0 0</origin>
-                <size>0.255 0.457</size>
+                <pos>0.477849 0.411111</pos>
+                <origin>0.5 0.5</origin>
+                <size>0.265698 0.472222</size>
                 <cornerRadius>0.0035</cornerRadius>
             </image>
             <image name="mediaPlaceholder">
-                <pos>0.4725 0.4035</pos>
+                <pos>0.477849 0.411111</pos>
                 <origin>0.5 0.5</origin>
-                <maxSize>0.12 0.17</maxSize>
+                <maxSize>0.125 0.1757</maxSize>
             </image>
-            <text name="description">
-                <pos>0.345 0.672</pos>
-                <origin>0 0</origin>
-                <size>0.255 0.173</size>
-            </text>
-
+            <!-- Taller than the line at every size, see ar-16-9.xml -->
             <text name="gameTitle">
-                <pos>0.645 0.365</pos>
-                <origin>0 1</origin>
-                <size>0.285 0.27</size>
+                <pos>${indexTitlePos}</pos>
+                <origin>0 0.5</origin>
+                <size>0.285 0.12</size>
             </text>
             <image name="captionRule">
-                <pos>0.6455 0.4</pos>
+                <pos>0.6455 0.275</pos>
                 <origin>0 0.5</origin>
                 <size>0.014 0.0016</size>
             </image>
             <text name="genre">
-                <pos>0.6655 0.4</pos>
+                <pos>0.6655 0.275</pos>
                 <origin>0 0.5</origin>
                 <size>0.19 0.04</size>
             </text>
             <rating name="rating">
-                <pos>0.93 0.4</pos>
+                <pos>0.93 0.275</pos>
                 <origin>1 0.5</origin>
                 <size>0 0.021</size>
             </rating>
             <text name="fileTags">
-                <pos>0.6655 0.437</pos>
+                <pos>0.6655 0.312</pos>
                 <origin>0 0.5</origin>
                 <size>0.2645 0.04</size>
             </text>
 
             <text name="labelReleased">
-                <pos>0.645 0.49</pos>
+                <pos>0.645 0.365</pos>
                 <origin>0 0.5</origin>
                 <size>0.13 0.03</size>
             </text>
             <datetime name="releaseDate">
-                <pos>0.645 0.523</pos>
+                <pos>0.645 0.398</pos>
                 <origin>0 0.5</origin>
                 <size>0.13 0.04</size>
             </datetime>
             <text name="labelPlayers">
-                <pos>0.7875 0.49</pos>
+                <pos>0.7875 0.365</pos>
                 <origin>0 0.5</origin>
                 <size>0.13 0.03</size>
             </text>
             <text name="players">
-                <pos>0.7875 0.523</pos>
+                <pos>0.7875 0.398</pos>
                 <origin>0 0.5</origin>
                 <size>0.13 0.04</size>
             </text>
             <text name="labelDeveloper">
-                <pos>0.645 0.58</pos>
+                <pos>0.645 0.455</pos>
                 <origin>0 0.5</origin>
                 <size>0.13 0.03</size>
             </text>
             <text name="developer">
-                <pos>0.645 0.613</pos>
+                <pos>0.645 0.488</pos>
                 <origin>0 0.5</origin>
                 <size>0.13 0.04</size>
             </text>
             <text name="labelPublisher">
-                <pos>0.7875 0.58</pos>
+                <pos>0.7875 0.455</pos>
                 <origin>0 0.5</origin>
                 <size>0.13 0.03</size>
             </text>
             <text name="publisher">
-                <pos>0.7875 0.613</pos>
+                <pos>0.7875 0.488</pos>
                 <origin>0 0.5</origin>
                 <size>0.13 0.04</size>
             </text>
+            <!-- To 0.845, the bottom of the grid: eight lines at the medium size -->
+            <text name="description">
+                <pos>0.645 0.54</pos>
+                <origin>0 0</origin>
+                <size>0.285 0.305</size>
+            </text>
 
             <image name="statsRule">
-                <pos>0.645 0.675</pos>
-                <origin>0 0.5</origin>
-                <size>0.285 0.0012</size>
+                <visible>false</visible>
             </image>
             <text name="labelLastPlayed">
-                <pos>0.645 0.725</pos>
+                <pos>0.345 0.695</pos>
                 <origin>0 0.5</origin>
-                <size>0.09 0.03</size>
+                <size>0.085 0.03</size>
             </text>
             <datetime name="lastPlayed">
-                <pos>0.645 0.758</pos>
+                <pos>0.345 0.728</pos>
                 <origin>0 0.5</origin>
-                <size>0.09 0.04</size>
+                <size>0.085 0.04</size>
             </datetime>
             <text name="labelPlayCount">
-                <pos>0.74 0.725</pos>
+                <pos>0.43 0.695</pos>
                 <origin>0 0.5</origin>
-                <size>0.09 0.03</size>
+                <size>0.085 0.03</size>
             </text>
             <text name="playCount">
-                <pos>0.74 0.758</pos>
+                <pos>0.43 0.728</pos>
                 <origin>0 0.5</origin>
-                <size>0.09 0.04</size>
+                <size>0.085 0.04</size>
             </text>
             <text name="labelPlayTime">
-                <pos>0.835 0.725</pos>
+                <pos>0.515 0.695</pos>
                 <origin>0 0.5</origin>
-                <size>0.095 0.03</size>
+                <size>0.085 0.03</size>
             </text>
             <text name="playTime">
-                <pos>0.835 0.758</pos>
+                <pos>0.515 0.728</pos>
                 <origin>0 0.5</origin>
-                <size>0.095 0.04</size>
+                <size>0.085 0.04</size>
             </text>
 
             <badges name="badges">
-                <pos>0.645 0.83</pos>
+                <pos>0.345 0.8</pos>
                 <origin>0 0.5</origin>
-                <size>0.285 0.034</size>
+                <size>0.2657 0.034</size>
                 <itemMargin>0.0055 -1</itemMargin>
             </badges>
-            <!-- Achievement progress, above the stats rule, at its right end -->
+            <!-- Achievement progress, at the right end of the badges row -->
             <image name="raProgress">
-                <pos>0.93 0.656</pos>
+                <pos>0.6107 0.8</pos>
                 <origin>1 0.5</origin>
                 <maxSize>0.2 0.022</maxSize>
             </image>
         </view>
     </variant>
 
-    <variant name="index, indexCompact, indexNames, indexCompactNames">
+    <variant name="index, indexCompact, indexNames, indexCompactNames, indexList, indexCompactList">
         <view name="gamelist">
             <image name="videoStill">
-                <pos>0.4725 0.4035</pos>
-                <cropSize>0.2535 0.4545</cropSize>
+                <pos>0.477849 0.411111</pos>
+                <cropSize>0.265698 0.472222</cropSize>
                 <cornerRadius>0.0035</cornerRadius>
             </image>
             <video name="gameVideo">
-                <pos>0.4725 0.4035</pos>
-                <cropSize>0.255 0.457</cropSize>
+                <pos>0.477849 0.411111</pos>
+                <cropSize>0.265698 0.472222</cropSize>
                 <videoCornerRadius>0.0035</videoCornerRadius>
                 <imageCornerRadius>0.0035</imageCornerRadius>
             </video>
         </view>
     </variant>
 
-    <variant name="indexStill, indexCompactStill, indexStillNames, indexCompactStillNames">
+    <variant name="indexStill, indexCompactStill, indexStillNames, indexCompactStillNames, indexStillList, indexCompactStillList">
         <view name="gamelist">
             <image name="gameImage">
-                <pos>0.4725 0.4035</pos>
-                <cropSize>0.255 0.457</cropSize>
+                <pos>0.477849 0.411111</pos>
+                <cropSize>0.265698 0.472222</cropSize>
                 <cornerRadius>0.0035</cornerRadius>
             </image>
         </view>
     </variant>
 
     <!-- Compact Index: the Index without the large title, which the list already shows.
-         The details column starts at the first row of the list with the caption and the
-         facts, and the description follows them down the column, ten lines instead of
-         four. The play statistics and the badges take its place beneath the media card -->
-    <variant name="indexCompact, indexCompactStill, indexCompactNames, indexCompactStillNames">
+         The details column starts at the first row of the list with the caption, so
+         everything in it moves up by 0.08 and the description gets ten lines instead of
+         eight. Only the positions change -->
+    <variant name="indexCompact, indexCompactStill, indexCompactNames, indexCompactStillNames, indexCompactList, indexCompactStillList">
         <view name="gamelist">
             <text name="gameTitle">
                 <visible>false</visible>
@@ -371,46 +455,10 @@
                 <pos>0.645 0.46</pos>
                 <size>0.285 0.385</size>
             </text>
-
-            <image name="statsRule">
-                <visible>false</visible>
-            </image>
-            <text name="labelLastPlayed">
-                <pos>0.345 0.695</pos>
-                <size>0.085 0.03</size>
-            </text>
-            <datetime name="lastPlayed">
-                <pos>0.345 0.728</pos>
-                <size>0.085 0.04</size>
-            </datetime>
-            <text name="labelPlayCount">
-                <pos>0.43 0.695</pos>
-                <size>0.085 0.03</size>
-            </text>
-            <text name="playCount">
-                <pos>0.43 0.728</pos>
-                <size>0.085 0.04</size>
-            </text>
-            <text name="labelPlayTime">
-                <pos>0.515 0.695</pos>
-                <size>0.085 0.03</size>
-            </text>
-            <text name="playTime">
-                <pos>0.515 0.728</pos>
-                <size>0.085 0.04</size>
-            </text>
-            <badges name="badges">
-                <pos>0.345 0.8</pos>
-                <size>0.255 0.034</size>
-            </badges>
-            <!-- Achievement progress, at the right end of the badges row -->
-            <image name="raProgress">
-                <pos>0.6 0.8</pos>
-            </image>
         </view>
     </variant>
 
-    <variant name="typographic, typographicNames">
+    <variant name="typographic, typographicNames, typographicList">
         <view name="gamelist">
             <text name="gameTitle">
                 <pos>0.385 0.4</pos>
@@ -538,7 +586,7 @@
         </view>
     </variant>
 
-    <variant name="gallery, galleryNames">
+    <variant name="gallery, galleryNames, galleryList">
         <include>./gallery/21-9-${systemCoverSizeType}.xml</include>
         <view name="gamelist">
             <text name="header">
@@ -622,7 +670,7 @@
         </view>
     </variant>
 
-    <variant name="grid, gridNames">
+    <variant name="grid, gridNames, gridList">
         <include>./grid/21-9-${systemCoverSizeType}.xml</include>
         <view name="gamelist">
             <text name="header">
@@ -677,30 +725,33 @@
                 <size>0.32 0.115</size>
             </text>
 
+            <!-- The media card from 0.61 0.51, 0.172674 x 0.311111: whole even pixels at
+                 3440x1440 and within 0.05 px of them at 2560x1080, and placed as the media
+                 are, see the Index above -->
             <image name="mediaAmbient">
-                <pos>0.6965 0.665</pos>
+                <pos>0.696337 0.665556</pos>
                 <origin>0.5 0.5</origin>
-                <size>0.2301 0.4463</size>
+                <size>0.23 0.448</size>
             </image>
             <image name="mediaMatte">
-                <pos>0.61 0.51</pos>
-                <origin>0 0</origin>
-                <size>0.173 0.31</size>
+                <pos>0.696337 0.665556</pos>
+                <origin>0.5 0.5</origin>
+                <size>0.172674 0.311111</size>
                 <cornerRadius>0.0035</cornerRadius>
             </image>
             <image name="mediaPlaceholder">
-                <pos>0.6965 0.665</pos>
+                <pos>0.696337 0.665556</pos>
                 <origin>0.5 0.5</origin>
-                <maxSize>0.0831 0.1209</maxSize>
+                <maxSize>0.0829 0.1213</maxSize>
             </image>
             <image name="videoStill">
-                <pos>0.6965 0.665</pos>
-                <cropSize>0.1715 0.3075</cropSize>
+                <pos>0.696337 0.665556</pos>
+                <cropSize>0.172674 0.311111</cropSize>
                 <cornerRadius>0.0035</cornerRadius>
             </image>
             <video name="gameVideo">
-                <pos>0.6965 0.665</pos>
-                <cropSize>0.173 0.31</cropSize>
+                <pos>0.696337 0.665556</pos>
+                <cropSize>0.172674 0.311111</cropSize>
                 <videoCornerRadius>0.0035</videoCornerRadius>
                 <imageCornerRadius>0.0035</imageCornerRadius>
             </video>

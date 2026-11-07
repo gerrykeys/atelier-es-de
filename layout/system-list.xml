@@ -1,0 +1,86 @@
+<!--
+    The List variants: the systems as a list on the left of the page, where the Index
+    has its list of games, set in the same type with the same accent marker, and the
+    selected system described on the right, left aligned: its drawing, its name, the
+    caption with its maker, year and kind beside a short rule, as the genre of a game,
+    its history and the number of games. The year of release is set large and faint
+    behind the drawing, as the Collections system does with the name of a collection.
+
+    A list can't paint the page as the carousel does, and when fading between systems
+    ES-DE dims to black whatever lies beneath it, so the page background is shown again
+    and these variants have transitions of their own on "automatic" (see theme.xml).
+    Positions are in the aspect ratio files.
+-->
+
+<theme>
+    <view name="system">
+        <textlist name="systemList">
+            <selectorColor>${accentColor}</selectorColor>
+            <selectorColorEnd>${accentColor}</selectorColorEnd>
+            <primaryColor>${listColor}</primaryColor>
+            <secondaryColor>${listColor}</secondaryColor>
+            <selectedColor>${titleColor}</selectedColor>
+            <selectedSecondaryColor>${titleColor}</selectedSecondaryColor>
+            <fontPath>${fontText}</fontPath>
+            <fontSize>${listSize}</fontSize>
+            <lineSpacing>${listSpacing}</lineSpacing>
+            <horizontalAlignment>left</horizontalAlignment>
+            <letterCase>none</letterCase>
+            <letterCaseAutoCollections>capitalize</letterCaseAutoCollections>
+            <textHorizontalScrolling>true</textHorizontalScrolling>
+            <textHorizontalScrollSpeed>0.8</textHorizontalScrollSpeed>
+            <textHorizontalScrollDelay>2.5</textHorizontalScrollDelay>
+            <fadeAbovePrimary>true</fadeAbovePrimary>
+            <zIndex>30</zIndex>
+        </textlist>
+        <!-- Softens the right edge where long names are clipped, as in the game lists -->
+        <image name="listFade">
+            <path>${pixel}</path>
+            <color>${bgColor}00</color>
+            <colorEnd>${bgColor}FF</colorEnd>
+            <gradientType>horizontal</gradientType>
+            <zIndex>35</zIndex>
+        </image>
+
+        <image name="systemArt">
+            <path>${systemArt}</path>
+            <default>${artFallback}</default>
+            <color>${artColor}</color>
+            <interpolation>linear</interpolation>
+            <zIndex>40</zIndex>
+        </image>
+        <!-- Nothing for the collections and apps, which have no year, see defaults.xml -->
+        <text name="releaseYear">
+            <text>${atelierYear}</text>
+            <fontPath>${fontDisplay}</fontPath>
+            <color>${titleColor}12</color>
+            <horizontalAlignment>right</horizontalAlignment>
+            <verticalAlignment>center</verticalAlignment>
+            <lineSpacing>1</lineSpacing>
+            <zIndex>36</zIndex>
+        </text>
+
+        <text name="systemTitle, autoCollectionTitle, customCollectionTitle">
+            <horizontalAlignment>left</horizontalAlignment>
+        </text>
+        <image name="captionRule">
+            <path>${pixel}</path>
+            <color>${accentColor}</color>
+            <zIndex>40</zIndex>
+        </image>
+        <!-- A long caption scrolls rather than ending in an ellipsis -->
+        <text name="caption">
+            <horizontalAlignment>left</horizontalAlignment>
+            <container>true</container>
+            <containerType>horizontal</containerType>
+            <containerStartDelay>2.5</containerStartDelay>
+            <containerScrollSpeed>0.7</containerScrollSpeed>
+        </text>
+        <text name="description">
+            <horizontalAlignment>left</horizontalAlignment>
+        </text>
+        <text name="gameCount">
+            <horizontalAlignment>left</horizontalAlignment>
+        </text>
+    </view>
+</theme>

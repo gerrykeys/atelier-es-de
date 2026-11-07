@@ -462,10 +462,13 @@ namespace Atelier
             return code == 0 || code == 1201 ? remote.ToString() : null;
         }
 
-        // The entries of a folder, or a TimeoutException when its disk doesn't answer in time
+        // The entries of a folder, or a TimeoutException when its disk doesn't answer in time.
+        // Read on a thread of its own: a reading of the library keeps the pool's threads
+        // busy, and waiting for one took seconds, up to the timeout on a large library.
         public static FileSystemInfo[] List(string dir, int timeoutMs)
         {
-            var task = Task.Run(() => new DirectoryInfo(dir).GetFileSystemInfos());
+            var task = Task.Factory.StartNew(() => new DirectoryInfo(dir).GetFileSystemInfos(),
+                CancellationToken.None, TaskCreationOptions.LongRunning, TaskScheduler.Default);
             try
             {
                 if (!task.Wait(timeoutMs)) throw new TimeoutException("No answer");
@@ -2991,6 +2994,30 @@ namespace Atelier
         public string Ext, File;
         public long Size, Mtime;
         public bool Aside;
+
+        // The size of media files, of the types the library knows
+        public static long Total(LibMedia[] media)
+        {
+            long n = 0;
+            if (media != null) foreach (var m in media) if (m.Type >= 0) n += m.Size;
+            return n;
+        }
+
+        // Adds the sizes of media files to sizes by type, indexes in the library's media types
+        public static void AddTo(long[] byType, LibMedia[] media)
+        {
+            if (media != null) foreach (var m in media) if (m.Type >= 0 && m.Type < byType.Length) byType[m.Type] += m.Size;
+        }
+
+        public static long[] NoSizes() { return new long[LibraryShape.MediaTypes.Length]; }
+
+        // Sizes by type as { type: size }, without the types that have none
+        public static Hashtable ByType(long[] byType)
+        {
+            var d = new Hashtable();
+            for (int t = 0; t < byType.Length; t++) if (byType[t] > 0) d[LibraryShape.MediaTypes[t]] = byType[t];
+            return d;
+        }
     }
 
     // A game in ES-DE: its path in the system's folder, and for a game of one file its size
@@ -3692,6 +3719,11 @@ namespace Atelier
         }
 
         public long SizeOf { get { return Local != null ? Local.Size : Archived != null ? Archived.Size : 0; } }
+
+        // The size of the game's media files in ES-DE, in the archive, and where SizeOf counts
+        public long LocalMediaSize { get { return Local != null ? LibMedia.Total(Local.Media) : 0; } }
+        public long ArchivedMediaSize { get { return Archived != null ? LibMedia.Total(Archived.Media) : 0; } }
+        public long MediaSizeOf { get { return Local != null ? LocalMediaSize : ArchivedMediaSize; } }
     }
 
     // A system of the library, with its games in the order of their names and how they
@@ -3706,6 +3738,8 @@ namespace Atelier
         public int[] Games = new int[0];
         public int[] Counts = new int[5];
         public long Packed, Size, UploadSize;
+        // The size of the media files of the same games: in the archive, in ES-DE, not archived
+        public long ArchiveMedia, LocalMedia, UploadMedia;
         // The files more than one game in ES-DE has, with those games
         public Dictionary<string, List<string>> Shared;
     }
@@ -4074,29 +4108,32 @@ namespace Atelier
             var counts = (int[])s.Counts.Clone();
             counts[state] += sign;
             s.Counts = counts;
-            if (g.Archived != null) s.Packed += sign * g.Archived.Packed;
-            if (g.Local != null) s.Size += sign * g.Local.Size;
-            if (state == LibStatus.Upload) s.UploadSize += sign * g.Local.Size;
+            if (g.Archived != null) { s.Packed += sign * g.Archived.Packed; s.ArchiveMedia += sign * g.ArchivedMediaSize; }
+            if (g.Local != null) { s.Size += sign * g.Local.Size; s.LocalMedia += sign * g.LocalMediaSize; }
+            if (state == LibStatus.Upload) { s.UploadSize += sign * g.Local.Size; s.UploadMedia += sign * g.LocalMediaSize; }
         }
 
         static void Tally(Snapshot snap, LibSystem s)
         {
             var counts = new int[5];
-            long packed = 0, size = 0, upload = 0;
+            long packed = 0, size = 0, upload = 0, archiveMedia = 0, localMedia = 0, uploadMedia = 0;
             foreach (int n in s.Games)
             {
                 var g = snap.Games[n];
                 if (g.Status == LibStatus.Gone) continue;
                 int state = StateOf(s, g);
                 counts[state]++;
-                if (g.Archived != null) packed += g.Archived.Packed;
-                if (g.Local != null) size += g.Local.Size;
-                if (state == LibStatus.Upload) upload += g.Local.Size;
+                if (g.Archived != null) { packed += g.Archived.Packed; archiveMedia += g.ArchivedMediaSize; }
+                if (g.Local != null) { size += g.Local.Size; localMedia += g.LocalMediaSize; }
+                if (state == LibStatus.Upload) { upload += g.Local.Size; uploadMedia += g.LocalMediaSize; }
             }
             s.Counts = counts;
             s.Packed = packed;
             s.Size = size;
             s.UploadSize = upload;
+            s.ArchiveMedia = archiveMedia;
+            s.LocalMedia = localMedia;
+            s.UploadMedia = uploadMedia;
         }
 
         // ES-DE's games and the archive's side by side, a large system's in several parts at once
@@ -4578,12 +4615,13 @@ namespace Atelier
             Json.WriteString(sb, g.Name);
             sb.Append(",\"status\":\"").Append(LibStatus.Names[g.Status]).Append("\",\"known\":").Append(s.Known ? "true" : "false");
             sb.Append(",\"local\":");
-            if (g.Local != null) sb.Append("{\"size\":").Append(g.Local.Size).Append('}');
+            if (g.Local != null) sb.Append("{\"size\":").Append(g.Local.Size).Append(",\"media\":").Append(g.LocalMediaSize).Append('}');
             else sb.Append("null");
             sb.Append(",\"archive\":");
             if (g.Archived != null)
             {
-                sb.Append("{\"size\":").Append(g.Archived.Size).Append(",\"packed\":").Append(g.Archived.Packed).Append(",\"archived\":");
+                sb.Append("{\"size\":").Append(g.Archived.Size).Append(",\"packed\":").Append(g.Archived.Packed).Append(",\"media\":").Append(g.ArchivedMediaSize)
+                  .Append(",\"archived\":");
                 Json.WriteString(sb, g.Archived.Archived);
                 sb.Append('}');
             }
@@ -4597,7 +4635,8 @@ namespace Atelier
 
         // The library's systems, each with how its games stand: { version, total, systems:
         // [{ id, name, known, games, counts: [installed, sync, upload, download,
-        // unavailable], packed, size, upload }] }, as JSON
+        // unavailable], packed, size, upload, archiveMedia, localMedia, uploadMedia }] },
+        // as JSON
         public static string Summary()
         {
             gate.EnterReadLock();
@@ -4626,7 +4665,8 @@ namespace Atelier
                     Json.WriteString(sb, s.FullName);
                     sb.Append(",\"known\":").Append(s.Known ? "true" : "false").Append(",\"games\":").Append(games).Append(",\"counts\":[");
                     for (int i = 0; i < s.Counts.Length; i++) { if (i > 0) sb.Append(','); sb.Append(s.Counts[i]); }
-                    sb.Append("],\"packed\":").Append(s.Packed).Append(",\"size\":").Append(s.Size).Append(",\"upload\":").Append(s.UploadSize).Append('}');
+                    sb.Append("],\"packed\":").Append(s.Packed).Append(",\"size\":").Append(s.Size).Append(",\"upload\":").Append(s.UploadSize)
+                      .Append(",\"archiveMedia\":").Append(s.ArchiveMedia).Append(",\"localMedia\":").Append(s.LocalMedia).Append(",\"uploadMedia\":").Append(s.UploadMedia).Append('}');
                 }
                 sb.Append("]}");
                 return sb.ToString();
@@ -4811,7 +4851,9 @@ namespace Atelier
         }
 
         // What the actions of a few games can do: for each transfer, how many games and how
-        // much (the size of the games, as the page shows it), and the state of the first
+        // much (the size of the games, as the page shows it), and the state of the first;
+        // for archiving and downloading, the size of the media that go too, by type
+        // ({ type: size }), the page counting those of the types chosen
         public static Hashtable Actions(List<LibGame> games)
         {
             var d = new Hashtable();
@@ -4820,24 +4862,30 @@ namespace Atelier
                 int count = 0;
                 long size = 0;
                 string first = null;
+                var media = LibMedia.NoSizes();
                 foreach (var g in games)
                 {
                     if (!Can(g, action)) continue;
                     count++;
                     size += g.SizeOf;
+                    if (action == "archive") LibMedia.AddTo(media, g.Local.Media);
+                    else if (action == "download") LibMedia.AddTo(media, g.Archived.Media);
                     if (first == null) first = LibStatus.Names[g.Status];
                 }
                 d[action] = new Hashtable { { "count", count }, { "size", size }, { "first", first } };
+                if (action == "archive" || action == "download") ((Hashtable)d[action])["media"] = LibMedia.ByType(media);
             }
             int unsafeCount = 0, inArchive = 0, onlyArchive = 0, notArchivedFirst = 0, install = 0, unarchived = 0;
             long installSize = 0, unarchivedSize = 0;
+            var installMedia = LibMedia.NoSizes();
+            var unarchivedMedia = LibMedia.NoSizes();
             foreach (var g in games)
             {
                 bool known;
                 gate.EnterReadLock();
                 try { known = current.Systems.Length > g.System && current.Systems[g.System].Known; } finally { gate.ExitReadLock(); }
-                if (g.Local == null && known) { install++; installSize += g.SizeOf; }
-                if (g.Status == LibStatus.Local) { unarchived++; unarchivedSize += g.SizeOf; }
+                if (g.Local == null && known) { install++; installSize += g.SizeOf; if (g.Archived != null) LibMedia.AddTo(installMedia, g.Archived.Media); }
+                if (g.Status == LibStatus.Local) { unarchived++; unarchivedSize += g.SizeOf; LibMedia.AddTo(unarchivedMedia, g.Local.Media); }
                 if (g.Local != null && g.Status != LibStatus.Archived && g.Status != LibStatus.Details) unsafeCount++;
                 if (g.Archived != null) inArchive++;
                 if (g.Archived != null && g.Local == null) onlyArchive++;
@@ -4848,8 +4896,8 @@ namespace Atelier
             d["onlyArchive"] = onlyArchive;
             d["count"] = games.Count;
             d["name"] = games.Count > 0 ? games[0].Name : null;
-            d["install"] = new Hashtable { { "count", install }, { "size", installSize } };
-            d["unarchived"] = new Hashtable { { "count", unarchived }, { "size", unarchivedSize } };
+            d["install"] = new Hashtable { { "count", install }, { "size", installSize }, { "media", LibMedia.ByType(installMedia) } };
+            d["unarchived"] = new Hashtable { { "count", unarchived }, { "size", unarchivedSize }, { "media", LibMedia.ByType(unarchivedMedia) } };
             d["allFresh"] = games.TrueForAll(g => !Can(g, "archive") || g.Status == LibStatus.Local);
             return d;
         }
@@ -5924,19 +5972,21 @@ namespace Atelier
         }
 
         // Of games, those only in ES-DE, to be archived, but for the ids left out:
-        // { games, size }
+        // { games, size, media }, media by type ({ type: size })
         public static Hashtable OnlyInEsde(IEnumerable<LibGame> games, object leftOut)
         {
             var skip = new HashSet<string>(Strings(leftOut), StringComparer.Ordinal);
             var found = new List<LibGame>();
             long size = 0;
+            var media = LibMedia.NoSizes();
             foreach (var g in games)
             {
                 if (g == null || g.Status != LibStatus.Local || skip.Contains(g.Id)) continue;
                 found.Add(g);
                 size += g.SizeOf;
+                LibMedia.AddTo(media, g.Local.Media);
             }
-            return new Hashtable { { "games", found }, { "size", size } };
+            return new Hashtable { { "games", found }, { "size", size }, { "media", LibMedia.ByType(media) } };
         }
 
         // What adding games to a collection does: of ids, those not in it yet (fresh); of
@@ -5957,7 +6007,7 @@ namespace Atelier
                 if (excluded.Contains(g.Id) && found.Contains(g.Id)) include.Add(g.Id);
                 else add.Add(g);
             }
-            return new Hashtable { { "fresh", fresh }, { "include", include.ToArray() }, { "add", add }, { "archive", archive["games"] }, { "archiveSize", archive["size"] } };
+            return new Hashtable { { "fresh", fresh }, { "include", include.ToArray() }, { "add", add }, { "archive", archive["games"] }, { "archiveSize", archive["size"] }, { "archiveMedia", archive["media"] } };
         }
 
         // The games of a collection by key: those added by hand, then of found (what its

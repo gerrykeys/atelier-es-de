@@ -1,6 +1,31 @@
 <theme>
     <variables>
         <atelierEyebrow>${systemManufacturer}  ·  ${systemReleaseYear}  ·  ${systemHardwareType}</atelierEyebrow>
+        <atelierYear>${systemReleaseYear}</atelierYear>
         <systemArt>./../systems/controllers-tagged/ngpc.svg</systemArt>
     </variables>
+    <aspectRatio name="16:9">
+        <variables>
+            <roomLightListPos>0.5189 0.2925</roomLightListPos>
+            <roomLightListSize>0.4826 0.8</roomLightListSize>
+        </variables>
+    </aspectRatio>
+    <aspectRatio name="16:10">
+        <variables>
+            <roomLightListPos>0.531 0.2925</roomLightListPos>
+            <roomLightListSize>0.5171 0.8</roomLightListSize>
+        </variables>
+    </aspectRatio>
+    <aspectRatio name="21:9">
+        <variables>
+            <roomLightListPos>0.4267 0.2925</roomLightListPos>
+            <roomLightListSize>0.3705 0.8</roomLightListSize>
+        </variables>
+    </aspectRatio>
+    <aspectRatio name="4:3">
+        <variables>
+            <roomLightListPos>0.5967 0.2775</roomLightListPos>
+            <roomLightListSize>0.5419 0.7</roomLightListSize>
+        </variables>
+    </aspectRatio>
 </theme>

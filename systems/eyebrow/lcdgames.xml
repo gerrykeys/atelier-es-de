@@ -3,4 +3,28 @@
         <atelierEyebrow>${systemHardwareType}</atelierEyebrow>
         <systemArt>./../systems/controllers-tagged/lcdgames.svg</systemArt>
     </variables>
+    <aspectRatio name="16:9">
+        <variables>
+            <roomLightListPos>0.5108 0.2925</roomLightListPos>
+            <roomLightListSize>0.4593 0.8</roomLightListSize>
+        </variables>
+    </aspectRatio>
+    <aspectRatio name="16:10">
+        <variables>
+            <roomLightListPos>0.5219 0.2925</roomLightListPos>
+            <roomLightListSize>0.4913 0.8</roomLightListSize>
+        </variables>
+    </aspectRatio>
+    <aspectRatio name="21:9">
+        <variables>
+            <roomLightListPos>0.4206 0.2925</roomLightListPos>
+            <roomLightListSize>0.353 0.8</roomLightListSize>
+        </variables>
+    </aspectRatio>
+    <aspectRatio name="4:3">
+        <variables>
+            <roomLightListPos>0.5872 0.2775</roomLightListPos>
+            <roomLightListSize>0.5148 0.7</roomLightListSize>
+        </variables>
+    </aspectRatio>
 </theme>

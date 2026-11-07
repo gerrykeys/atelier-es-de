@@ -33,6 +33,10 @@ body { font-family: Text; color: var(--text); }
 
 .el { position: absolute; box-sizing: border-box; margin: 0; }
 .line { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+/* Text that scrolls sideways (marquee in atelier.js): an ellipsis would hide it all */
+.line.scrolling, .menu-label.scrolling { text-overflow: clip; }
+.marquee-run { display: inline-block; white-space: nowrap; will-change: transform; }
+.marquee-gap { display: inline-block; width: 3em; }
 .caps { font-family: Caps; text-transform: uppercase; }
 .caps-light { font-family: CapsLight; text-transform: uppercase; }
 .tags { font-family: Tags; text-transform: uppercase; color: var(--muted); font-size: var(--tag-size); }

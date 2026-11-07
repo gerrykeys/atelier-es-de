@@ -1,0 +1,39 @@
+<!--
+    The carousel of the system view: line drawings with the selected system large in the
+    middle and its neighbours smaller and dimmed on either side, the name and caption set
+    centered beneath it (see system.xml). The List variants have a list of the systems
+    instead, see system-list.xml.
+
+    The carousel spans the whole screen and paints the page background itself, so
+    with fade transitions only the text fades while the drawings keep sliding and the
+    page never dips to black.
+-->
+
+<theme>
+    <view name="system">
+        <image name="background">
+            <visible>false</visible>
+        </image>
+
+        <carousel name="systemCarousel">
+            <type>horizontal</type>
+            <pos>0 0</pos>
+            <size>1 1</size>
+            <origin>0 0</origin>
+            <staticImage>${systemArt}</staticImage>
+            <defaultImage>${artFallback}</defaultImage>
+            <itemVerticalAlignment>center</itemVerticalAlignment>
+            <imageFit>contain</imageFit>
+            <imageInterpolation>linear</imageInterpolation>
+            <imageColor>${artColor}</imageColor>
+            <unfocusedItemOpacity>0.28</unfocusedItemOpacity>
+            <fastScrolling>true</fastScrolling>
+            <color>${bgColor}</color>
+            <fontPath>${fontDisplay}</fontPath>
+            <textColor>${titleColor}</textColor>
+            <letterCaseAutoCollections>capitalize</letterCaseAutoCollections>
+            <fadeAbovePrimary>true</fadeAbovePrimary>
+            <zIndex>20</zIndex>
+        </carousel>
+    </view>
+</theme>

@@ -1,6 +1,31 @@
 <theme>
     <variables>
         <atelierEyebrow>${systemManufacturer}  ·  ${systemReleaseYear}  ·  ${systemHardwareType}</atelierEyebrow>
+        <atelierYear>${systemReleaseYear}</atelierYear>
         <systemArt>./../systems/controllers-tagged/ps3.svg</systemArt>
     </variables>
+    <aspectRatio name="16:9">
+        <variables>
+            <roomLightListPos>0.5159 0.2925</roomLightListPos>
+            <roomLightListSize>0.474 0.8</roomLightListSize>
+        </variables>
+    </aspectRatio>
+    <aspectRatio name="16:10">
+        <variables>
+            <roomLightListPos>0.5277 0.2925</roomLightListPos>
+            <roomLightListSize>0.5076 0.8</roomLightListSize>
+        </variables>
+    </aspectRatio>
+    <aspectRatio name="21:9">
+        <variables>
+            <roomLightListPos>0.4244 0.2925</roomLightListPos>
+            <roomLightListSize>0.3641 0.8</roomLightListSize>
+        </variables>
+    </aspectRatio>
+    <aspectRatio name="4:3">
+        <variables>
+            <roomLightListPos>0.5932 0.2775</roomLightListPos>
+            <roomLightListSize>0.5319 0.7</roomLightListSize>
+        </variables>
+    </aspectRatio>
 </theme>

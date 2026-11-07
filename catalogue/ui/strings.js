@@ -41,8 +41,9 @@ const STRINGS = {
     games: n => String(n) === '1' ? '1 game' : `${n} games`,
     platforms: n => String(n) === '1' ? '1 platform' : `${n} platforms`,
     platform: { local: 'In ES-DE', archive: 'In the archive', unarchived: 'Not archived', toInstall: 'To install' },
-    facts: { size: 'Size', archived: 'Archived', saves: 'Saves', released: 'Released', players: 'Players' },
+    facts: { size: 'Size', media: 'Media', archived: 'Archived', saves: 'Saves', players: 'Players' },
     packed: s => `zip ${s}`,
+    mediaSize: s => `media ${s}`,
     savesState: {
       none: 'None', local: 'Only here', archive: 'In the archive', synced: 'In sync', 'local-newer': 'Newer here',
       'archive-newer': 'Newer in the archive', conflict: 'Changed on both',
@@ -122,7 +123,7 @@ const STRINGS = {
       missing: 'The archive is gone', missingText: p => `${p} doesn't exist anymore. Press A to choose another folder.`,
       notArchive: 'No archive here', notArchiveText: p => `${p} holds no archive. Press A to choose a folder.`,
       denied: 'This folder can\'t be used', deniedText: p => `Catalogue can't write in ${p}. Choose another folder.`,
-      reading: 'Reading the library', readingText: 'ES-DE and the archive are being read: a moment.',
+      reading: 'Reading the library', readingText: 'ES-DE and the archive are being read. With many games, or the archive on a network disk, it can take a minute: the games appear here as soon as it is done.',
       readFailed: 'The library couldn\'t be read',
       emptySection: {
         archive: ['Nothing in the archive yet', 'Archive your games from In ES-DE: Y on a platform archives them all.'],
@@ -255,8 +256,9 @@ const STRINGS = {
     games: n => String(n) === '1' ? '1 gioco' : `${n} giochi`,
     platforms: n => String(n) === '1' ? '1 piattaforma' : `${n} piattaforme`,
     platform: { local: 'In ES-DE', archive: 'Nell\'archivio', unarchived: 'Non archiviati', toInstall: 'Da installare' },
-    facts: { size: 'Dimensione', archived: 'Archiviato', saves: 'Salvataggi', released: 'Uscita', players: 'Giocatori' },
+    facts: { size: 'Dimensione', media: 'Media', archived: 'Archiviato', saves: 'Salvataggi', players: 'Giocatori' },
     packed: s => `zip ${s}`,
+    mediaSize: s => `media ${s}`,
     savesState: {
       none: 'Nessuno', local: 'Solo qui', archive: 'Nell\'archivio', synced: 'Allineati', 'local-newer': 'Più recenti qui',
       'archive-newer': 'Più recenti nell\'archivio', conflict: 'Cambiati da entrambe le parti',
@@ -337,7 +339,7 @@ const STRINGS = {
       missing: 'L\'archivio non c\'è più', missingText: p => `${p} non esiste più. Premi A per scegliere un'altra cartella.`,
       notArchive: 'Qui non c\'è un archivio', notArchiveText: p => `${p} non contiene un archivio. Premi A per scegliere una cartella.`,
       denied: 'Questa cartella non si può usare', deniedText: p => `Catalogue non può scrivere in ${p}. Scegli un'altra cartella.`,
-      reading: 'Lettura della libreria', readingText: 'Sto leggendo ES-DE e l\'archivio: un momento.',
+      reading: 'Lettura della libreria', readingText: 'Sto leggendo ES-DE e l\'archivio. Con tanti giochi, o con l\'archivio su un disco di rete, può volerci un minuto: i giochi appaiono qui appena ho finito.',
       readFailed: 'Non è stato possibile leggere la libreria',
       emptySection: {
         archive: ['Ancora niente nell\'archivio', 'Archivia i tuoi giochi da In ES-DE: Y su una piattaforma li archivia tutti.'],

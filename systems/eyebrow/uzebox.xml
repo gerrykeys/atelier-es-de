@@ -1,6 +1,31 @@
 <theme>
     <variables>
         <atelierEyebrow>${systemManufacturer}  ·  ${systemReleaseYear}  ·  ${systemHardwareType}</atelierEyebrow>
+        <atelierYear>${systemReleaseYear}</atelierYear>
         <systemArt>./../systems/controllers-tagged/uzebox.svg</systemArt>
     </variables>
+    <aspectRatio name="16:9">
+        <variables>
+            <roomLightListPos>0.5602 0.2925</roomLightListPos>
+            <roomLightListSize>0.6 0.8</roomLightListSize>
+        </variables>
+    </aspectRatio>
+    <aspectRatio name="16:10">
+        <variables>
+            <roomLightListPos>0.5769 0.2925</roomLightListPos>
+            <roomLightListSize>0.6 0.8</roomLightListSize>
+        </variables>
+    </aspectRatio>
+    <aspectRatio name="21:9">
+        <variables>
+            <roomLightListPos>0.4577 0.2925</roomLightListPos>
+            <roomLightListSize>0.45 0.8</roomLightListSize>
+        </variables>
+    </aspectRatio>
+    <aspectRatio name="4:3">
+        <variables>
+            <roomLightListPos>0.6448 0.2775</roomLightListPos>
+            <roomLightListSize>0.6 0.7</roomLightListSize>
+        </variables>
+    </aspectRatio>
 </theme>
