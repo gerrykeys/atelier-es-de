@@ -76,8 +76,13 @@
             <containerStartDelay>2.5</containerStartDelay>
             <containerScrollSpeed>0.7</containerScrollSpeed>
         </text>
+        <!-- Beneath the list, unlike the other texts: for 0.4 s after each move ES-DE also
+             draws the previous system a page higher, and some graphics drivers let its
+             history, the only element clipped on its own, show at the top of the screen.
+             Drawn before the list it is painted over by the current page's background -->
         <text name="description">
             <horizontalAlignment>left</horizontalAlignment>
+            <zIndex>25</zIndex>
         </text>
         <text name="gameCount">
             <horizontalAlignment>left</horizontalAlignment>
