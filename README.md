@@ -1,3 +1,7 @@
+## ☕ Support my work
+If you enjoy my ES-DE themes and would like to support their development, consider buying me a coffee! Every contribution is greatly appreciated. ❤️ <br><br>
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/gerrykeys)
+
 # Atelier for ES-DE
 
 ![Atelier's system view: line drawings of the controllers slide past while the system name and its history fade in beneath](screenshots/systems.gif)
